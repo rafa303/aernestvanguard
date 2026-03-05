@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aernest Vanguard - Premium Esports Ecosystem</title>
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Aernest Vanguard - Digital Gaming Marketplace & TO">
+    <meta property="og:description" content="Platform gaming terdepan untuk komunitas esports Indonesia. Jual beli akun, top up, dan Tournament Organizer profesional.">
+    <meta property="og:image" content="images/logo.png">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#101216">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    
+    <style>
+        /* =========================================
+           1. MODERN, FRIENDLY CARDS + GLASSMORPHISM
+           ========================================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            /* Base Colors */
+            --bg-base: #0a0c10;       
+            --bg-surface: rgba(30, 34, 41, 0.7);    
+            --bg-surface-solid: #1e2229;
+            --bg-surface-hover: rgba(38, 43, 52, 0.9);
+            
+            --text-main: #f0f2f5;
+            --text-muted: #94a3b8;    
+            
+            --accent-red: #f25555;    
+            --accent-glow: rgba(242, 85, 85, 0.4);
+            --accent-gradient: linear-gradient(135deg, #ff6b6b, #f25555);
+            
+            --border-color: rgba(255, 255, 255, 0.08);
+            --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.3);
+            --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.5);
+            
+            /* AI Colors */
+            --ai-glow: rgba(162, 0, 255, 0.3);
+            --ai-gradient: linear-gradient(135deg, #a200ff, #5c7aff);
+        }
+        
+        /* FIX Overscroll iOS/Mac agar tidak ada putih bocor */
+        html { 
+            scroll-behavior: smooth; 
+            font-size: clamp(14px, 1vw, 16px);
+            background-color: var(--bg-base);
+            overscroll-behavior-y: none;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            color: var(--text-main); 
+            line-height: 1.6; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            background-color: transparent; 
+        }
+
+        /* LOADING SCREEN */
+        #loading-screen {
+            position: fixed; inset: 0; z-index: 9999;
+            background-color: #050608;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loader-logo { width: 120px; height: auto; margin-bottom: 25px; animation: pulse 1.5s infinite; filter: drop-shadow(0 0 25px var(--accent-glow)); }
+        .loader-text { font-weight: 900; font-size: 1.8rem; letter-spacing: 3px; color: var(--text-main); margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+        .loader-text span { color: var(--accent-red); }
+        .loader-bar { width: 250px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; position: relative; }
+        .loader-progress { position: absolute; top: 0; left: 0; height: 100%; width: 50%; background: var(--accent-gradient); border-radius: 4px; animation: load 1s ease-in-out infinite alternate; }
+        
+        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
+        @keyframes load { 0% { left: -50%; width: 50%; } 100% { left: 100%; width: 50%; } }
+
+        /* BACKGROUND ELEMENTS (Dinamis & Terlihat Jelas) */
+        .bg-wrapper {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+        }
+        .bg-pattern {
+            position: absolute; inset: 0; opacity: 0.6;
+            background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .bg-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
+        .orb-1 { top: -20%; left: -10%; width: 60vw; height: 60vw; background: var(--accent-red); animation: floatOrb 12s infinite alternate ease-in-out; }
+        .orb-2 { bottom: -10%; right: -20%; width: 50vw; height: 50vw; background: #3b5bdb; animation: floatOrb 15s infinite alternate-reverse ease-in-out; }
+        
+        .bg-watermark {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80vw; max-width: 900px; opacity: 0.03; filter: grayscale(100%);
+        }
+        
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(80px, 80px) scale(1.15); } }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.3; }
+        .accent-text { color: var(--accent-red); }
+        .muted-text { color: var(--text-muted); font-size: clamp(0.9rem, 2vw, 1rem); }
+
+        /* Elevation Layering untuk konten di atas Background */
+        main, footer, .modal-overlay, .navbar, .mobile-top-bar { position: relative; z-index: 10; }
+
+        /* =========================================
+           MOBILE TOP BAR (Khusus Logo & Tombol TO)
+           ========================================= */
+        .mobile-top-bar { display: none; }
+
+        /* =========================================
+           NAVIGATION (GLASSMORPHISM PILL)
+           ========================================= */
+        .navbar {
+            position: fixed; top: 20px; width: 100%; z-index: 1000;
+            display: flex; justify-content: center; padding: 0 1rem; 
+            transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .navbar.scrolled { top: 10px; }
+        .navbar.scrolled .nav-container { 
+            padding: 0.6rem 1.5rem; background: rgba(16, 18, 22, 0.85); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.05);
+        }
+
+        .nav-container {
+            max-width: 1000px; width: 100%; background: rgba(30, 34, 41, 0.5);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px; padding: 0.8rem 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); transition: all 0.3s;
+        }
+
+        .desktop-logo { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .desktop-logo img { height: 32px; width: auto; filter: drop-shadow(0 2px 8px var(--accent-glow)); transition: 0.3s; }
+        .desktop-logo:hover img { transform: rotate(-10deg) scale(1.1); }
+        .desktop-logo h2 { font-size: 1.3rem; font-weight: 900; letter-spacing: 0.5px; margin: 0; text-transform: uppercase; }
+
+        .nav-menu { list-style: none; display: flex; gap: clamp(1rem, 2vw, 2rem); align-items: center; margin: 0; padding: 0; }
+        .nav-link {
+            color: var(--text-muted); text-decoration: none; font-size: 0.95rem; font-weight: 600;
+            transition: all 0.2s ease; cursor: pointer; padding: 0.6rem 1.2rem; border-radius: 100px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .nav-icon { display: none; }
+        
+        .nav-link:hover { color: var(--text-main); background: rgba(255,255,255,0.05); }
+        .nav-link.active { 
+            color: var(--text-main); background: rgba(242, 85, 85, 0.15); 
+            color: var(--accent-red); box-shadow: inset 0 0 0 1px rgba(242, 85, 85, 0.3); 
+        }
+
+        .desktop-cta {
+            background: var(--accent-gradient); color: white; border: none;
+            padding: 0.7rem 1.5rem; border-radius: 100px; font-weight: 700; font-size: 0.95rem;
+            cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 12px var(--accent-glow);
+            white-space: nowrap;
+        }
+        .desktop-cta:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 20px rgba(242,85,85,0.5); }
+
+        /* =========================================
+           MAIN LAYOUT & COMPONENTS
+           ========================================= */
+        main { padding-top: 130px; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 clamp(1.5rem, 5vw, 3rem); }
+        
+        .view-section { display: none; animation: slideUpFade 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); padding-bottom: 5rem; }
+        .view-section.active { display: block; }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Buttons Dinamis */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2.5rem); 
+            font-weight: 700; font-size: clamp(0.9rem, 1.5vw, 1rem);
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
+            border-radius: 100px; text-decoration: none; border: none;
+        }
+        .btn-primary { background: var(--accent-gradient); color: white; box-shadow: 0 4px 15px rgba(242,85,85,0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(242,85,85,0.5); filter: brightness(1.1); }
+        
+        .btn-secondary { background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); border-color: rgba(255,255,255,0.3); box-shadow: var(--shadow-soft); }
+
+        .btn-ai { background: var(--ai-gradient); color: white; box-shadow: 0 4px 15px var(--ai-glow); border: none; padding: 0.6rem 1.2rem; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-ai:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(162, 0, 255, 0.5); filter: brightness(1.1); }
+        .btn-ai:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* AI Response Box */
+        .ai-response-box { display: none; margin-top: 15px; padding: 1rem; border-radius: 12px; background: rgba(162, 0, 255, 0.08); border: 1px solid rgba(162, 0, 255, 0.3); font-size: 0.9rem; color: var(--text-main); line-height: 1.5; animation: slideUpFade 0.3s ease; }
+        .ai-response-box.active { display: block; }
+        .ai-response-box strong { color: #d08cff; display: block; margin-bottom: 5px; }
+
+        /* Hero Section */
+        .hero { text-align: center; padding: clamp(2rem, 5vw, 4rem) 0 clamp(4rem, 8vw, 8rem); position: relative; }
+        
+        .hero-inline-logo {
+            display: inline-flex; align-items: center; justify-content: center; gap: 15px;
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border-color);
+            padding: 8px 24px; border-radius: 100px; margin-bottom: 2rem;
+            backdrop-filter: blur(10px); box-shadow: var(--shadow-soft);
+            animation: floatLogo 4s ease-in-out infinite;
+        }
+        .hero-inline-logo img { height: 28px; width: auto; filter: drop-shadow(0 0 10px rgba(242,85,85,0.5)); }
+        .hero-inline-logo span { font-weight: 800; letter-spacing: 2px; font-size: 0.95rem; color: var(--text-main); }
+        @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        .hero-title { font-size: clamp(2.8rem, 7vw, 5.5rem); max-width: 1000px; margin: 0 auto 1.5rem; line-height: 1.1; text-transform: uppercase; }
+        .hero-desc { font-size: clamp(1.05rem, 2vw, 1.2rem); color: var(--text-muted); max-width: 700px; margin: 0 auto 2.5rem; font-weight: 400; }
+        .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+        /* Guide / Onboarding */
+        .onboarding-steps {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem; background: var(--bg-surface); border: 1px solid var(--border-color);
+            border-radius: 24px; padding: clamp(2rem, 4vw, 3rem); margin-bottom: 6rem;
+            backdrop-filter: blur(20px); position: relative; overflow: hidden;
+        }
+        .onboarding-steps::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-gradient); }
+        .step-item { position: relative; padding-left: 1rem; }
+        .step-num { color: var(--accent-red); font-size: 0.85rem; font-weight: 900; letter-spacing: 1.5px; margin-bottom: 0.8rem; display: inline-block; background: rgba(242,85,85,0.1); padding: 4px 12px; border-radius: 100px; }
+        .step-title { font-size: 1.3rem; margin-bottom: 0.5rem; }
+
+        /* Section Header */
+        .section-header { margin-bottom: 3rem; text-align: center; }
+        .section-title { font-size: clamp(2rem, 4vw, 2.5rem); margin-bottom: 0.5rem; text-transform: uppercase; }
+
+        /* Dynamic Grids */
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); gap: 2rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 2rem; }
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 1.5rem; }
+
+        /* Friendly Cards (Glassmorphism effect) */
+        .friendly-card {
+            background: var(--bg-surface); border: 1px solid var(--border-color);
+            border-radius: 24px; overflow: hidden; transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex; flex-direction: column; position: relative; backdrop-filter: blur(20px);
+        }
+        .friendly-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-float); border-color: rgba(255,255,255,0.15); background: var(--bg-surface-hover); }
+        
+        .card-icon-wrapper { font-size: 2.5rem; margin-bottom: 1.5rem; display: inline-flex; align-items: center; justify-content: center; width: 70px; height: 70px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 20px; transition: 0.3s; }
+        .friendly-card:hover .card-icon-wrapper { transform: scale(1.1) rotate(5deg); background: rgba(242,85,85,0.15); border-color: rgba(242,85,85,0.3); }
+        
+        .card-img-wrapper {
+            height: 180px; background: linear-gradient(135deg, #1e2229 0%, #101216 100%);
+            display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .card-img-wrapper::after { content:''; position:absolute; inset:0; background: radial-gradient(circle, transparent 20%, #0a0c10 120%); }
+        .card-img-text { font-size: 3rem; font-weight: 900; color: rgba(255,255,255,0.08); letter-spacing: 4px; z-index: 1; text-transform: uppercase; }
+        .card-tag {
+            position: absolute; top: 15px; left: 15px; z-index: 2;
+            background: var(--text-main); color: var(--bg-base);
+            font-size: 0.75rem; font-weight: 800; padding: 6px 14px; border-radius: 100px;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .card-content { padding: clamp(1.5rem, 3vw, 2.5rem); display: flex; flex-direction: column; flex-grow: 1; z-index: 2; }
+        .card-title { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 1.5rem; border-top: 1px dashed var(--border-color); }
+        .card-price { font-weight: 900; font-size: 1.2rem; color: var(--accent-red); }
+
+        /* Forms */
+        .form-section { background: var(--bg-surface); padding: clamp(2rem, 5vw, 3.5rem); border: 1px solid var(--border-color); border-radius: 24px; box-shadow: var(--shadow-soft); backdrop-filter: blur(20px); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.6rem; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+        .form-control {
+            width: 100%; padding: 1.1rem 1.4rem; background: rgba(10, 12, 16, 0.8); color: var(--text-main);
+            border: 1px solid var(--border-color); border-radius: 16px;
+            font-family: 'Inter', sans-serif; font-size: 1rem; transition: all 0.3s;
+        }
+        .form-control:focus { outline: none; border-color: var(--accent-red); box-shadow: 0 0 0 3px rgba(242,85,85,0.15); background: var(--bg-base); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+
+        /* Tabs */
+        .tabs-container { display: flex; gap: 0.8rem; margin-bottom: 3rem; flex-wrap: wrap; justify-content: center; }
+        .tab-btn {
+            background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-muted);
+            font-size: 0.95rem; font-weight: 600; cursor: pointer; padding: 0.8rem 1.8rem; transition: all 0.3s;
+            border-radius: 100px; backdrop-filter: blur(10px);
+        }
+        .tab-btn:hover { color: var(--text-main); background: var(--bg-surface-hover); transform: translateY(-2px); }
+        .tab-btn.active { background: var(--text-main); color: var(--bg-base); border-color: var(--text-main); box-shadow: var(--shadow-soft); }
+
+        /* Dynamic Roster */
+        .roster-slot { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; animation: fadeIn 0.3s ease; }
+        .roster-remove { background: rgba(242,85,85,0.1); color: var(--accent-red); border: 1px solid transparent; border-radius: 14px; min-width: 50px; height: 50px; cursor: pointer; font-size: 1.5rem; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .roster-remove:hover { background: var(--accent-red); color: white; border-color: var(--accent-red); }
+
+        /* Modals */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(10, 12, 16, 0.85); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 1rem; backdrop-filter: blur(12px); opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal { background: var(--bg-surface-solid); border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 600px; max-height: 90vh; display: flex; flex-direction: column; border-radius: 24px; box-shadow: 0 24px 48px rgba(0,0,0,0.6); transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .modal-overlay.active .modal { transform: scale(1); }
+        .modal-header { padding: 1.8rem 2.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); }
+        .modal-title { font-size: 1.4rem; margin: 0; font-weight: 800; text-transform: uppercase; }
+        .modal-close { background: rgba(255,255,255,0.05); border: none; color: var(--text-muted); width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { color: white; background: var(--accent-red); transform: rotate(90deg); }
+        .modal-body { padding: 2.5rem; overflow-y: auto; }
+
+        /* Lists */
+        .bullet-list { list-style: none; }
+        .bullet-list li { position: relative; padding-left: 2rem; margin-bottom: 1rem; color: var(--text-muted); }
+        .bullet-list li::before { content: '✓'; position: absolute; left: 0; top: 2px; color: var(--text-base); background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; font-size: 1.1rem; }
+
+        /* Footer */
+        .footer { border-top: 1px solid var(--border-color); padding: 5rem 0 2rem; margin-top: 6rem; background: rgba(10, 12, 16, 0.8); backdrop-filter: blur(20px); position: relative; z-index: 10; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-bottom: 4rem; }
+        .footer-logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+        .footer-heading { font-size: 1.05rem; margin-bottom: 1.5rem; color: var(--text-main); font-weight: 800; text-transform: uppercase; }
+        .footer-links { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; transition: 0.2s; cursor: pointer; display: inline-block; font-weight: 500; }
+        .footer-links a:hover { color: var(--text-main); transform: translateX(5px); }
+        .footer-bottom { text-align: center; border-top: 1px solid var(--border-color); padding-top: 2rem; font-size: 0.9rem; color: var(--text-muted); }
+
+        /* =========================================
+           RESPONSIVE BREAKPOINTS (APP DOCK MOBILE)
+           ========================================= */
+        @media (max-width: 768px) {
+            /* 1. Header Khusus Mobile (Atas) */
+            .mobile-top-bar {
+                position: fixed; top: 10px; left: 10px; right: 10px; z-index: 1000;
+                display: flex; justify-content: space-between; align-items: center;
+                background: rgba(30, 34, 41, 0.6); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+                border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+                padding: 0.6rem 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            .mobile-top-bar .nav-logo { display: flex; align-items: center; gap: 8px; }
+            .mobile-top-bar .nav-logo img { height: 26px; filter: drop-shadow(0 2px 4px var(--accent-glow)); }
+            .mobile-top-bar .nav-logo h2 { font-size: 1.2rem; margin: 0; font-weight: 900; line-height: 1; }
+            .mobile-top-bar .btn-mobile-to { 
+                background: var(--accent-gradient); color: white; border: none; font-weight: 700;
+                padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8rem; box-shadow: 0 4px 10px var(--accent-glow);
+                cursor: pointer;
+            }
+
+            /* 2. Main Navbar Menjadi Bottom Dock (App-Like) */
+            .navbar { top: auto; bottom: 15px; padding: 0 10px; }
+            .nav-container {
+                padding: 0.5rem; border-radius: 24px;
+                justify-content: center; box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            }
+            
+            .desktop-logo, .desktop-cta { display: none !important; }
+            
+            .nav-menu { width: 100%; justify-content: space-around; gap: 0; }
+            .nav-link {
+                flex-direction: column; padding: 0.5rem 0; gap: 4px;
+                border-radius: 16px; width: 65px;
+            }
+            .nav-icon { display: block; font-size: 1.4rem; line-height: 1; }
+            .nav-link span:not(.nav-icon) { font-size: 0.65rem; font-weight: 700; letter-spacing: 0; }
+            
+            main { padding-top: 90px; padding-bottom: 100px; } /* Jarak agar tidak tertutup Dock */
+            .hero-inline-logo { margin-bottom: 1.5rem; padding: 6px 18px; }
+            .card-img-wrapper { height: 140px; }
+            .card-content { padding: 1.5rem; }
+            .form-section { padding: 1.5rem; border-radius: 16px; }
+            .friendly-card { border-radius: 16px; }
+            .onboarding-steps { padding: 1.5rem; border-radius: 16px; }
+            .modal-header { padding: 1.2rem 1.5rem; }
+            .modal-body { padding: 1.5rem; }
+            .loader-logo { width: 90px; }
+            .loader-text { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOADING SPLASH SCREEN -->
+    <div id="loading-screen">
+        <img src="images/logo.png" alt="Aernest Logo" class="loader-logo" onerror="this.style.display='none'">
+        <div class="loader-text">AERNEST <span>VANGUARD</span></div>
+        <div class="loader-bar"><div class="loader-progress"></div></div>
+    </div>
+
+    <!-- BACKGROUND ELEMENTS (Super Jelas & Dinamis) -->
+    <div class="bg-wrapper">
+        <div class="bg-pattern"></div>
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <img src="images/logo.png" class="bg-watermark" alt="Watermark" onerror="this.style.display='none'">
+    </div>
+
+    <!-- HEADER MOBILE (Hanya muncul di HP) -->
+    <div class="mobile-top-bar">
+        <div class="nav-logo" onclick="App.navigate('home')">
+            <img src="images/logo-navbar.png" alt="Logo" onerror="this.style.display='none'">
+            <h2>AERNEST <span style="color: var(--accent-red); font-size: 0.7em;">VANGUARD</span></h2>
+        </div>
+        <button class="btn-mobile-to" onclick="App.navigate('to-order')">BUAT T.O</button>
+    </div>
+
+    <!-- NAVIGATION (Pill Desktop / Bottom Dock Mobile) -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <!-- Logo Desktop -->
+            <div class="nav-logo desktop-logo" onclick="App.navigate('home')">
+                <img src="images/logo-navbar.png" alt="Logo" onerror="this.style.display='none'">
+                <h2>AERNEST <span style="color: var(--accent-red); font-size: 0.8em;">VANGUARD</span></h2>
+            </div>
+            
+            <!-- Menu Links -->
+            <ul class="nav-menu" id="nav-menu">
+                <li><a class="nav-link active" onclick="App.navigate('home')">
+                    <span class="nav-icon">🏠</span><span>Beranda</span>
+                </a></li>
+                <li><a class="nav-link" onclick="App.navigate('marketplace')">
+                    <span class="nav-icon">🛒</span><span>Katalog</span>
+                </a></li>
+                <li><a class="nav-link" onclick="App.navigate('services')">
+                    <span class="nav-icon">🏆</span><span>Layanan</span>
+                </a></li>
+                <li><a class="nav-link" onclick="App.navigate('contact')">
+                    <span class="nav-icon">💬</span><span>Bantuan</span>
+                </a></li>
+            </ul>
+
+            <!-- CTA Desktop -->
+            <button class="nav-cta-btn desktop-cta" onclick="App.navigate('to-order')">BUAT TURNAMEN</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="app-content">
+        
+        <!-- ==============================================
+             VIEW: HOME
+             ============================================== -->
+        <section id="view-home" class="view-section active">
+            
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-inline-logo">
+                        <img src="images/logo.png" alt="Icon" onerror="this.style.display='none'">
+                        <span>AERNEST VANGUARD</span>
+                    </div>
+                    
+                    <h1 class="hero-title">Ekosistem Esports & <span class="accent-text">Marketplace</span> Terpercaya</h1>
+                    <p class="hero-desc">Platform yang menghubungkan ribuan gamers dengan penyelenggara turnamen dan layanan transaksi digital paling aman di Indonesia. Mulai petualanganmu sekarang!</p>
+                    
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="App.navigate('services')">Eksplorasi Layanan</button>
+                        <button class="btn btn-secondary" onclick="App.navigate('marketplace')">Lihat Katalog Game</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <!-- ONBOARDING -->
+                <div class="section-header" style="margin-top: 1rem;">
+                    <h2 class="section-title">Cara Kerja <span class="accent-text">Platform</span></h2>
+                    <p class="muted-text">Panduan singkat untuk kamu yang baru bergabung di komunitas kami.</p>
+                </div>
+                <div class="onboarding-steps">
+                    <div class="step-item">
+                        <span class="step-num">LANGKAH 01</span>
+                        <h3 class="step-title">Pilih Kebutuhanmu</h3>
+                        <p class="muted-text">Eksplorasi layanan Katalog untuk beli akun & top up murah, atau masuk ke menu Layanan untuk menyelenggarakan turnamenmu sendiri.</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">LANGKAH 02</span>
+                        <h3 class="step-title">Transaksi Super Aman</h3>
+                        <p class="muted-text">Gunakan fitur form pintar kami yang terhubung langsung dengan WhatsApp Admin. Semua pembayaran dikawal ketat dengan sistem Escrow (Rekber).</p>
+                    </div>
+                    <div class="step-item">
+                        <span class="step-num">LANGKAH 03</span>
+                        <h3 class="step-title">Main & Dominasi</h3>
+                        <p class="muted-text">Pamerkan skin & item barumu, atau bersiaplah memimpin tim esports kamu untuk memenangkan Prize Pool di turnamen bergengsi kami.</p>
+                    </div>
+                </div>
+
+                <!-- EVENT BANNER -->
+                <div class="section-header">
+                    <h2 class="section-title">Event <span class="accent-text">Terdekat</span></h2>
+                    <p class="muted-text">Turnamen komunitas yang sedang panas minggu ini.</p>
+                </div>
+
+                <div class="friendly-card" style="flex-direction: row; flex-wrap: wrap; margin-bottom: 6rem;">
+                    <div class="card-img-wrapper" style="flex: 1; min-width: 300px; height: auto; min-height: 300px;">
+                        <span class="card-img-text">BONDFEST</span>
+                    </div>
+                    <div class="card-content" style="flex: 2; min-width: 300px; padding: clamp(2rem, 4vw, 3rem);">
+                        <span class="card-tag" style="position:relative; top:0; left:0; display:inline-block; margin-bottom:1rem; background: rgba(242,85,85,0.15); color: var(--accent-red);">🔥 SEDANG BERJALAN</span>
+                        <h3 class="card-title" style="font-size: clamp(1.8rem, 3vw, 2.5rem);">BONDFEST 2026</h3>
+                        <p class="card-desc" style="font-size: 1.05rem;">Diselenggarakan oleh HASA Entertainment berkolaborasi penuh dengan Aernest Vanguard sebagai mitra resmi Tournament Organizer.</p>
+                        <ul class="bullet-list" style="margin-bottom: 2.5rem;">
+                            <li><strong>Host:</strong> HASA Entertainment x Aernest</li>
+                            <li><strong>Tanggal:</strong> 6 Maret 2026</li>
+                            <li><strong>Mode:</strong> Online (Kualifikasi) & Offline (Finalis)</li>
+                            <li><strong>Bracket:</strong> Single Elimination Terpusat</li>
+                        </ul>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="App.openModal('bondfest-modal')">Lihat Rundown Lengkap</button>
+                            <button class="btn btn-secondary" onclick="App.navigate('contact')">Hubungi Panitia</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURES -->
+                <div class="section-header">
+                    <h2 class="section-title">Mengapa Memilih <span class="accent-text">Kami?</span></h2>
+                </div>
+                <div class="grid-3" style="margin-bottom: 6rem;">
+                    <div class="friendly-card" style="padding: 2.5rem; text-align: center;">
+                        <div class="card-icon-wrapper">⚡</div>
+                        <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Tournament Organizer</h3>
+                        <p class="muted-text">Selenggarakan turnamen gaming profesional dengan sistem yang adil dan transparan tanpa repot memikirkan teknis.</p>
+                    </div>
+                    <div class="friendly-card" style="padding: 2.5rem; text-align: center;">
+                        <div class="card-icon-wrapper">🎯</div>
+                        <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Marketplace Gaming</h3>
+                        <p class="muted-text">Platform jual beli item, akun, dan voucher game dengan pengawasan admin dan keamanan Escrow terjamin.</p>
+                    </div>
+                    <div class="friendly-card" style="padding: 2.5rem; text-align: center;">
+                        <div class="card-icon-wrapper">💡</div>
+                        <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Komunitas Solid</h3>
+                        <p class="muted-text">Bergabunglah dengan ribuan gamers positif dan ambil bagian dalam memajukan ekosistem esports Indonesia.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             VIEW: MARKETPLACE
+             ============================================== -->
+        <section id="view-marketplace" class="view-section">
+            <div class="container">
+                <div class="section-header" style="margin-bottom: 3rem;">
+                    <h1 class="hero-title" style="font-size: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: 1rem;">Katalog <span class="accent-text">Marketplace</span></h1>
+                    <p class="hero-desc" style="margin-bottom: 0;">Temukan kebutuhan gamingmu. Transaksi aman, cepat, dan 100% anti-hackback.</p>
+                </div>
+
+                <div class="tabs-container">
+                    <button class="tab-btn active" onclick="App.filterMarket('akun', this)">Beli Akun Game</button>
+                    <button class="tab-btn" onclick="App.filterMarket('makjakun', this)">Makjakun (Escrow)</button>
+                    <button class="tab-btn" onclick="App.filterMarket('topup', this)">Top Up Instant</button>
+                </div>
+
+                <div class="grid-4" id="marketplace-grid" style="margin-bottom: 4rem;">
+                    <!-- Akun Items -->
+                    <div class="friendly-card market-item" data-category="akun">
+                        <div class="card-img-wrapper"><span class="card-tag">Verified</span><span class="card-img-text">MLBB</span></div>
+                        <div class="card-content">
+                            <h4 class="card-title">Akun MLBB Mythic</h4>
+                            <p class="card-desc">Skin 50+ (Epic/Legend), Rank Mythic, Winrate 60% Aman.</p>
+                            <div class="card-footer">
+                                <span class="card-price">Rp 1.500.000</span>
+                                <button class="btn btn-primary" style="padding: 0.5rem 1.2rem;" onclick="App.openCheckout('Akun MLBB Mythic', 'Rp 1.500.000')">Beli</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="friendly-card market-item" data-category="akun">
+                        <div class="card-img-wrapper"><span class="card-tag" style="background:#5c7aff;">Escrow</span><span class="card-img-text">VALO</span></div>
+                        <div class="card-content">
+                            <h4 class="card-title">Akun Valorant Plat</h4>
+                            <p class="card-desc">Bundle 10+ premium, Agents unlock lengkap, Region AP.</p>
+                            <div class="card-footer">
+                                <span class="card-price">Rp 850.000</span>
+                                <button class="btn btn-primary" style="padding: 0.5rem 1.2rem;" onclick="App.openCheckout('Akun Valorant Platinum', 'Rp 850.000')">Beli</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Up Items -->
+                    <div class="friendly-card market-item" data-category="topup" style="display:none;">
+                        <div class="card-img-wrapper"><span class="card-tag" style="background:#4ade80; color:#101216;">Resmi</span><span class="card-img-text">MLBB</span></div>
+                        <div class="card-content">
+                            <h4 class="card-title">Diamonds MLBB</h4>
+                            <p class="card-desc">Proses hitungan detik via UID server. 100% Legal.</p>
+                            <div class="card-footer">
+                                <span class="card-price" style="font-size: 1.1rem;">Mulai Rp 15K</span>
+                                <button class="btn btn-primary" style="padding: 0.5rem 1.2rem;" onclick="App.openCheckout('Top Up Diamonds MLBB', 'Mulai Rp 15.000')">Isi</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="friendly-card market-item" data-category="topup" style="display:none;">
+                        <div class="card-img-wrapper"><span class="card-tag" style="background:#facc15; color:#101216;">Promo</span><span class="card-img-text">STEAM</span></div>
+                        <div class="card-content">
+                            <h4 class="card-title">Steam Wallet IDR</h4>
+                            <p class="card-desc">Kode digital fresh, pengiriman instan langsung ke WA.</p>
+                            <div class="card-footer">
+                                <span class="card-price" style="font-size: 1.1rem;">Mulai Rp 50K</span>
+                                <button class="btn btn-primary" style="padding: 0.5rem 1.2rem;" onclick="App.openCheckout('Top Up Wallet Steam', 'Mulai Rp 50.000')">Isi</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Makjakun Item -->
+                    <div class="friendly-card market-item" data-category="makjakun" style="display:none;">
+                        <div class="card-img-wrapper"><span class="card-tag" style="background:var(--accent-red);">Aman 100%</span><span class="card-img-text" style="font-size:2rem;">MAKJAKUN</span></div>
+                        <div class="card-content">
+                            <h4 class="card-title">Jasa Rekber Akun</h4>
+                            <p class="card-desc">Jembatan aman antara penjual & pembeli. Hindari penipuan!</p>
+                            <div class="card-footer">
+                                <span class="card-price" style="font-size:0.95rem; color:var(--text-main);">Fee Transparan</span>
+                                <button class="btn btn-secondary" style="padding: 0.5rem 1.2rem;" onclick="App.openEscrowModal()">Hubungi Admin</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Blocks Dinamis -->
+                <div class="form-section category-info" id="info-akun">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Tentang Jual Beli Akun</h3>
+                    <p class="muted-text">Katalog kami difokuskan pada keamanan listing, transparansi deskripsi, dan dukungan perantara jika diperlukan. Deskripsi dijamin jelas terkait rank, skin, bundle, dan riwayat akun. <strong>Sangat disarankan menggunakan MAKJAKUN</strong> sebagai perantara (escrow) agar transaksi 100% aman bebas dari penipuan tarik kembali (hackback).</p>
+                </div>
+                <div class="form-section category-info" id="info-makjakun" style="display:none;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Sistem MAKJAKUN (Escrow)</h3>
+                    <p class="muted-text">Makelar Jual Beli Akun adalah layanan perantara krusial untuk memastikan transaksi berjalan adil. Dana dari pembeli akan ditahan sementara oleh pihak kami hingga akun berhasil diverifikasi dan dikamankan oleh pembeli. Admin akan membantu komunikasi secara real-time di grup WhatsApp.</p>
+                </div>
+                <div class="form-section category-info" id="info-topup" style="display:none;">
+                    <h3 style="margin-bottom: 1rem; font-size: 1.5rem;">Top Up Games Legal</h3>
+                    <p class="muted-text">Layanan isi ulang mata uang dalam game dengan proses secepat kilat. Seluruh produk kami dijamin bersumber dari saluran resmi distributor authorized (Legal) untuk menghindari risiko akun terbanned atau diamond minus. Bukti invoice resmi selalu disediakan atas permintaan.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             VIEW: SERVICES (LAYANAN T.O)
+             ============================================== -->
+        <section id="view-services" class="view-section">
+            <div class="container">
+                <div class="section-header" style="margin-bottom: 4rem;">
+                    <h1 class="hero-title" style="font-size: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: 1rem;">Layanan <span class="accent-text">Unggulan</span></h1>
+                    <p class="hero-desc" style="margin-bottom: 0;">Infrastruktur lengkap untuk komunitas gaming. Dari turnamen santai hingga produksi event offline skala besar.</p>
+                </div>
+
+                <div class="grid-2" style="margin-bottom: 5rem;">
+                    <!-- Active Service -->
+                    <div class="friendly-card" style="border: 2px solid var(--accent-red);">
+                        <div class="card-content" style="padding: clamp(2rem, 4vw, 3rem);">
+                            <div class="card-icon-wrapper" style="font-size: 2.5rem; margin-bottom: 1.5rem;">🏆</div>
+                            <h2 class="card-title" style="font-size: 1.8rem; margin-bottom: 1rem;">Tournament Organizer</h2>
+                            <p class="card-desc" style="font-size: 1.05rem;">Selenggarakan turnamen dengan bracket terstruktur, lengkap dengan caster, live production, dan ruang turnamen eksklusif.</p>
+                            <ul class="bullet-list" style="margin-bottom: 2.5rem;">
+                                <li>Pendaftaran online & verifikasi identitas tim</li>
+                                <li>Pengaturan Bracket System & Anti-cheat</li>
+                                <li>Caster, Live Streaming muti-platform, & Overlay UI</li>
+                                <li>Pengelolaan & distribusi Prize Pool aman</li>
+                            </ul>
+                            <button class="btn btn-primary" onclick="App.navigate('to-order')">Buat Turnamen Sekarang</button>
+                        </div>
+                    </div>
+
+                    <!-- Coming Soon Services -->
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div class="friendly-card" style="flex-direction: row; padding: 1.5rem 2rem; align-items: center; gap: 1.5rem;">
+                            <div style="font-size: 2.5rem; opacity: 0.5;">🎮</div>
+                            <div style="flex-grow: 1;">
+                                <h4 style="margin-bottom: 5px; font-size: 1.1rem;">Jasa Joki Rank</h4>
+                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Kenaikan rank aman & terarah oleh pro-player.</p>
+                            </div>
+                            <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="App.openModal('service-comingsoon-modal')">Soon</button>
+                        </div>
+                        
+                        <div class="friendly-card" style="flex-direction: row; padding: 1.5rem 2rem; align-items: center; gap: 1.5rem;">
+                            <div style="font-size: 2.5rem; opacity: 0.5;">🎓</div>
+                            <div style="flex-grow: 1;">
+                                <h4 style="margin-bottom: 5px; font-size: 1.1rem;">Aernest Academy</h4>
+                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Coaching eksklusif & manajemen karir esports.</p>
+                            </div>
+                            <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="App.openModal('service-comingsoon-modal')">Soon</button>
+                        </div>
+                        
+                        <div class="friendly-card" style="flex-direction: row; padding: 1.5rem 2rem; align-items: center; gap: 1.5rem;">
+                            <div style="font-size: 2.5rem; opacity: 0.5;">🎪</div>
+                            <div style="flex-grow: 1;">
+                                <h4 style="margin-bottom: 5px; font-size: 1.1rem;">Event Offline (E.O)</h4>
+                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Venue, stage production, & izin teknis turnamen LAN.</p>
+                            </div>
+                            <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="App.openModal('service-comingsoon-modal')">Soon</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h2 class="section-title">Pilihan <span class="accent-text">Paket T.O</span></h2>
+                </div>
+                
+                <div class="grid-3">
+                    <div class="friendly-card">
+                        <div class="card-content" style="text-align: center; padding: 3rem 2rem;">
+                            <h3 style="color: var(--text-muted); margin-bottom: 1rem; font-size: 1.2rem;">Starter</h3>
+                            <div style="font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; color: var(--text-main);">Rp 2.5jt</div>
+                            <p class="muted-text" style="margin-bottom: 2rem;">Kapasitas hingga 32 Tim</p>
+                            <ul class="bullet-list" style="text-align: left; margin-bottom: 2.5rem;">
+                                <li>Penyusunan Bracket dasar</li>
+                                <li>Form & Verifikasi Pendaftaran</li>
+                                <li>Sesi Streaming standar</li>
+                                <li>Dukungan teknis via Discord/WA</li>
+                            </ul>
+                            <button class="btn btn-secondary" style="width: 100%;" onclick="App.goToOrder('starter')">Pilih Starter</button>
+                        </div>
+                    </div>
+                    
+                    <div class="friendly-card" style="border: 2px solid var(--accent-red); transform: scale(1.05); z-index: 10; background: #1a1e24; box-shadow: 0 15px 40px rgba(0,0,0,0.6);">
+                        <div style="background: var(--accent-gradient); color: white; text-align: center; padding: 0.6rem; font-weight: 800; font-size: 0.85rem; letter-spacing: 2px;">★ PALING DIMINATI ★</div>
+                        <div class="card-content" style="text-align: center; padding: 2.5rem 2rem;">
+                            <h3 style="margin-bottom: 1rem; font-size: 1.4rem;">Professional</h3>
+                            <div style="font-size: 2.8rem; font-weight: 900; margin-bottom: 0.5rem; color: var(--accent-red);">Rp 7.5jt</div>
+                            <p class="muted-text" style="margin-bottom: 2rem;">Kapasitas hingga 64 Tim</p>
+                            <ul class="bullet-list" style="text-align: left; margin-bottom: 2.5rem;">
+                                <li>Bracket profesional multi-fase</li>
+                                <li>Multi-platform live streaming</li>
+                                <li>Caster bersertifikat & commentary</li>
+                                <li>Room tournament dedikasi (aman)</li>
+                                <li>Distribusi manajemen hadiah</li>
+                            </ul>
+                            <button class="btn btn-primary" style="width: 100%;" onclick="App.goToOrder('professional')">Pilih Professional</button>
+                        </div>
+                    </div>
+                    
+                    <div class="friendly-card">
+                        <div class="card-content" style="text-align: center; padding: 3rem 2rem;">
+                            <h3 style="color: var(--text-muted); margin-bottom: 1rem; font-size: 1.2rem;">Enterprise</h3>
+                            <div style="font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; color: var(--text-main);">Custom</div>
+                            <p class="muted-text" style="margin-bottom: 2rem;">Skala Besar / Liga (128+ Tim)</p>
+                            <ul class="bullet-list" style="text-align: left; margin-bottom: 2.5rem;">
+                                <li>Suite turnamen white-label</li>
+                                <li>Produksi kualitas broadcast TV</li>
+                                <li>Dukungan sponsor placement</li>
+                                <li>Room premium & anti-cheat</li>
+                                <li>Kustomisasi rules menyeluruh</li>
+                            </ul>
+                            <button class="btn btn-secondary" style="width: 100%;" onclick="App.goToOrder('enterprise')">Konsultasi Admin</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             VIEW: TO ORDER (FORM PEMESANAN TO) + AI 
+             ============================================== -->
+        <section id="view-to-order" class="view-section">
+            <div class="container">
+                <div class="section-header" style="text-align: left; margin-bottom: 2rem;">
+                    <h2 class="section-title" style="text-align: left;">Mulai <span class="accent-text">Turnamenmu</span></h2>
+                    <p class="muted-text">Lengkapi detail kebutuhan event agar tim operasional kami bisa segera menyusun proposal dan mengunci jadwal.</p>
+                </div>
+                
+                <div class="form-section">
+                    <form id="to-order-form" onsubmit="App.submitTO(event)">
+                        <div class="grid-2">
+                            <!-- Kolom 1 -->
+                            <div>
+                                <h3 style="margin-bottom: 1.5rem; color: var(--text-main); font-size: 1.2rem; display: flex; align-items: center; gap: 10px;">
+                                    <span style="color:var(--accent-red);">1.</span> Detail Event
+                                </h3>
+                                <div class="form-group">
+                                    <label>Pilihan Paket T.O</label>
+                                    <select id="package" class="form-control" required>
+                                        <option value="">-- Pilih Skala Paket --</option>
+                                        <option value="starter">Paket Starter (Mulai Rp 2.5jt)</option>
+                                        <option value="professional">Paket Professional (Mulai Rp 7.5jt)</option>
+                                        <option value="enterprise">Paket Enterprise (Custom Pricing)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>Nama Turnamen / Title</label><input type="text" id="event-name" class="form-control" placeholder="Cth: Aernest Community Cup S1" required></div>
+                                <div class="form-group"><label>Rencana Tanggal Pelaksanaan</label><input type="date" id="event-date" class="form-control" required></div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                    <div class="form-group">
+                                        <label>Metode</label>
+                                        <select id="mode" class="form-control" required><option value="online">Full Online</option><option value="offline">Offline (LAN)</option></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Format Bracket</label>
+                                        <select id="bracket" class="form-control" required>
+                                            <option value="single-elimination">Single Elim.</option>
+                                            <option value="double-elimination">Double Elim.</option>
+                                            <option value="round-robin">Liga (Round Robin)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Kolom 2 -->
+                            <div>
+                                <h3 style="margin-bottom: 1.5rem; color: var(--text-main); font-size: 1.2rem; display: flex; align-items: center; gap: 10px;">
+                                    <span style="color:var(--accent-red);">2.</span> Data Penyelenggara
+                                </h3>
+                                <div class="form-group"><label>Nama Penanggung Jawab (PIC)</label><input type="text" id="order-name" class="form-control" required></div>
+                                <div class="form-group"><label>Nomor WhatsApp Aktif</label><input type="tel" id="order-phone" class="form-control" placeholder="0812xxxx" required></div>
+                                
+                                <div style="background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 16px; border: 1px dashed var(--border-color); margin-top: 1.5rem;">
+                                    <label style="margin-bottom: 0.5rem; color: var(--text-main); font-size: 1rem;">Input Tim Awal (Opsional)</label>
+                                    <p class="muted-text" style="font-size: 0.8rem; margin-bottom: 1.5rem;">Tambahkan slot form di bawah jika sudah ada perwakilan tim yang memastikan mendaftar.</p>
+                                    <div id="roster-container"></div>
+                                    <button type="button" class="btn btn-secondary" onclick="App.addPlayer()" style="width: 100%; padding: 0.6rem; border-style: dashed;">+ Tambah Form Tim</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Proposal Writer Feature -->
+                        <div class="form-group" style="margin-top: 2rem; background: rgba(162, 0, 255, 0.05); padding: 1.5rem; border-radius: 16px; border: 1px solid rgba(162, 0, 255, 0.2);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+                                <label style="margin: 0; color: #d08cff;">Catatan Khusus (Briefing Tambahan)</label>
+                                <button type="button" id="btn-ai-proposal" class="btn-ai" onclick="App.generateProposalDraft()">
+                                    ✨ Rapikan Proposal dengan AI
+                                </button>
+                            </div>
+                            <textarea id="order-message" class="form-control" rows="4" placeholder="Tuliskan catatan kasar, logo sponsor, atau aturan main spesifik game, lalu klik tombol AI di atas untuk merapikannya menjadi bahasa proposal yang keren!"></textarea>
+                        </div>
+
+                        <div style="margin-top: 3rem; text-align: right;">
+                            <button type="submit" class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.1rem; width: 100%;">Ajukan Proposal via WA Admin</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================
+             VIEW: CONTACT
+             ============================================== -->
+        <section id="view-contact" class="view-section">
+            <div class="container">
+                <div class="section-header" style="margin-bottom: 4rem;">
+                    <h1 class="hero-title" style="font-size: clamp(2.5rem, 5vw, 3.5rem); margin-bottom: 1rem;">Pusat <span class="accent-text">Bantuan</span></h1>
+                    <p class="hero-desc">Ada kendala teknis atau tertarik menjalin kerja sama partnership? Tim support kami siap merespons pesanmu dengan tanggap.</p>
+                </div>
+
+                <div class="grid-2" style="margin-bottom: 6rem; align-items: start;">
+                    <!-- Info Blocks -->
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        
+                        <div class="friendly-card" style="padding: 2rem; flex-direction: row; align-items: center; gap: 1.5rem;">
+                            <div style="font-size: 2rem; background: rgba(255,255,255,0.05); width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; border-radius: 16px;">📍</div>
+                            <div>
+                                <h4 style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 5px; font-weight: 700;">ALAMAT KANTOR PUSAT</h4>
+                                <p style="font-weight: 600; font-size: 1.05rem;">Jl. Gaming No. 123, Esports District<br>Jakarta Selatan, 12345</p>
+                            </div>
+                        </div>
+                        
+                        <div class="friendly-card" style="padding: 2rem; flex-direction: row; align-items: center; gap: 1.5rem; border-color: rgba(242,85,85,0.3);">
+                            <div style="font-size: 2rem; background: rgba(242,85,85,0.1); width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; border-radius: 16px;">💬</div>
+                            <div>
+                                <h4 style="color: var(--accent-red); font-size: 0.85rem; margin-bottom: 5px; font-weight: 700;">HOTLINE WHATSAPP</h4>
+                                <p style="font-weight: 800; font-size: 1.3rem; color: var(--text-main);">+62 882-0092-69282</p>
+                                <p class="muted-text" style="font-size: 0.85rem;">Operasional: Senin - Jumat, 09:00 - 18:00</p>
+                            </div>
+                        </div>
+                        
+                        <div class="friendly-card" style="padding: 2rem; flex-direction: row; align-items: center; gap: 1.5rem;">
+                            <div style="font-size: 2rem; background: rgba(255,255,255,0.05); width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; border-radius: 16px;">✉️</div>
+                            <div>
+                                <h4 style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 5px; font-weight: 700;">SUREL / EMAIL</h4>
+                                <p style="font-weight: 600; font-size: 1rem; margin-bottom: 3px;">partnership@aernest.id <span class="muted-text" style="font-weight:normal; font-size: 0.8rem;">(Bisnis/Sponsor)</span></p>
+                                <p style="font-weight: 600; font-size: 1rem;">aernest.id@gmail.com <span class="muted-text" style="font-weight:normal; font-size: 0.8rem;">(Aduan Umum)</span></p>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <!-- Form Section -->
+                    <div class="form-section">
+                        <h2 style="font-size: 1.6rem; margin-bottom: 2rem;">Kirim Tiket Aduan</h2>
+                        <form id="contact-form" onsubmit="App.submitAduan(event)">
+                            <div class="form-group"><label>Nama Pengirim</label><input type="text" id="c-name" class="form-control" placeholder="Tuliskan nama Anda..." required></div>
+                            <div class="form-group"><label>Email Balasan</label><input type="email" id="c-email" class="form-control" placeholder="email@contoh.com" required></div>
+                            <div class="form-group"><label>Nomor HP/WA Aktif</label><input type="tel" id="c-phone" class="form-control" required></div>
+                            <div class="form-group">
+                                <label>Topik Permasalahan</label>
+                                <select id="c-service" class="form-control" required>
+                                    <option value="">-- Pilih Topik Diskusi --</option>
+                                    <option value="Tournament Organizer">Tanya Seputar Tournament Organizer</option>
+                                    <option value="Marketplace">Laporan / Kendala Marketplace</option>
+                                    <option value="Partnership">Proposal Kerja Sama (Sponsorship)</option>
+                                    <option value="Lainnya">Pertanyaan Lainnya</option>
+                                </select>
+                            </div>
+                            <div class="form-group"><label>Isi Pesan Detail</label><textarea id="c-message" class="form-control" placeholder="Jelaskan kebutuhan atau aduanmu secara detail di sini..." required></textarea></div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.2rem;">Kirim Tiket Sekarang</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- FAQ SECTION -->
+                <div class="section-header">
+                    <h2 class="section-title">Pertanyaan <span class="accent-text">Umum (FAQ)</span></h2>
+                </div>
+                <div class="grid-2">
+                    <div class="friendly-card" style="padding: 2.5rem;">
+                        <h4 style="font-size: 1.15rem; margin-bottom: 1rem; color: var(--text-main);">Bagaimana cara mendaftar turnamen?</h4>
+                        <p class="muted-text">Anda bisa mendaftar turnamen melalui website kami dengan mengisi form pendaftaran yang ada di tab Layanan T.O. Setelah dikirim, admin khusus operasional kami akan langsung merespons proposalmu melalui WhatsApp untuk konfirmasi detail dan teknis.</p>
+                    </div>
+                    <div class="friendly-card" style="padding: 2.5rem;">
+                        <h4 style="font-size: 1.15rem; margin-bottom: 1rem; color: var(--text-main);">Apakah marketplace aman untuk transaksi?</h4>
+                        <p class="muted-text">Sangat dijamin aman! Kami menyediakan dan merekomendasikan sistem Escrow (Makjakun / Makelar) di mana dana ditahan oleh penengah resmi kami hingga item benar-benar divalidasi dan diterima oleh pembeli. Bebas dari penipuan hackback.</p>
+                    </div>
+                    <div class="friendly-card" style="padding: 2.5rem;">
+                        <h4 style="font-size: 1.15rem; margin-bottom: 1rem; color: var(--text-main);">Apa saja game yang didukung oleh Aernest?</h4>
+                        <p class="muted-text">Saat ini mayoritas game kompetitif populer didukung penuh oleh platform T.O maupun Marketplace kami: Mobile Legends, Valorant, PUBG Mobile, Free Fire, Dota 2, CS2, dan berbagai game esports potensial lainnya.</p>
+                    </div>
+                    <div class="friendly-card" style="padding: 2.5rem;">
+                        <h4 style="font-size: 1.15rem; margin-bottom: 1rem; color: var(--text-main);">Bagaimana sistem coaching Aernest Academy bekerja?</h4>
+                        <p class="muted-text">Layanan coaching sedang dalam tahap penyempurnaan akhir dan akan segera rilis. Rencananya, coaching dilakukan secara privat (sesi 1-on-1) melalui platform Discord bersama pelatih bersertifikat profesional atau mantan pro-player sesuai jadwal.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">
+                        <img src="images/logo-navbar.png" alt="Logo" style="height:40px;" onerror="this.style.display='none'">
+                        AERNEST
+                    </div>
+                    <p class="muted-text" style="max-width: 280px; font-size: 0.95rem; line-height: 1.6;">Aernest Vanguard adalah ekosistem pendukung komunitas esports terbesar di Indonesia, mewadahi gamers profesional dan kasual dalam satu atap.</p>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Navigasi Utama</h4>
+                    <ul class="footer-links">
+                        <li><a onclick="App.navigate('home')">Beranda Platform</a></li>
+                        <li><a onclick="App.navigate('marketplace')">Marketplace Item & Akun</a></li>
+                        <li><a onclick="App.navigate('services')">Layanan T.O & Event</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Pusat Dukungan</h4>
+                    <ul class="footer-links">
+                        <li><a onclick="App.navigate('contact')">Kontak Admin WA</a></li>
+                        <li><a onclick="App.navigate('contact')">Kirim Tiket Bantuan</a></li>
+                        <li><a onclick="App.navigate('contact')">FAQ & Info Umum</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-heading">Komunitas Sosial</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://instagram.com/aernest.id" target="_blank" style="display: flex; align-items: center; gap: 8px;"><span>📷</span> Instagram (@aernest.id)</a></li>
+                        <li><a href="#" style="display: flex; align-items: center; gap: 8px;"><span>🎵</span> Tiktok Official</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Aernest Vanguard. Hak Cipta Dilindungi Undang-Undang.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==============================================
+         MODALS 
+         ============================================== -->
+    
+    <!-- Modal Checkout -->
+    <div id="checkout-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Selesaikan Pesanan</h3>
+                <button class="modal-close" onclick="App.closeModal('checkout-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: rgba(242,85,85,0.05); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; text-align: center; border: 1px solid rgba(242,85,85,0.2);">
+                    <p id="co-product" style="font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Nama Produk</p>
+                    <p id="co-price" style="font-size: 2.2rem; font-weight: 900; color: var(--accent-red); margin: 0; line-height: 1;">Rp 0</p>
+                </div>
+                <form id="co-form" onsubmit="App.processCheckout(event)">
+                    <div class="form-group"><label>Nickname Game (IGN)</label><input type="text" id="co-ign" class="form-control" required placeholder="Contoh: RafaVanguard"></div>
+                    <div class="form-group"><label>ID Pengguna (Serta Server)</label><input type="text" id="co-id" class="form-control" required placeholder="Contoh: 12345678 (1234)"></div>
+                    <div class="form-group"><label>Nomor WhatsApp Aktif</label><input type="tel" id="co-wa" class="form-control" required placeholder="0812..."></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1.2rem;">Lanjut Chat Admin Pembayaran</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Escrow (WITH AI VALUATION) -->
+    <div id="escrow-modal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Pengajuan Makjakun (Rekber)</h3>
+                <button class="modal-close" onclick="App.closeModal('escrow-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p class="muted-text" style="margin-bottom: 1.5rem; font-size: 0.95rem;">Isi formulir ini agar tim admin kami bisa memfasilitasi pembuatan grup WhatsApp 3 arah untuk keamanan dana transaksi Anda.</p>
+                <form id="escrow-form" onsubmit="App.submitEscrow(event)">
+                    <div class="form-group"><label>Kamu Sebagai Pihak Mana?</label><select id="escrow-role" class="form-control" required><option value="Pembeli">Saya Pembeli Akun</option><option value="Penjual">Saya Penjual Akun</option></select></div>
+                    
+                    <div class="form-group">
+                        <label>Ceritakan Detail Transaksimu</label>
+                        <textarea id="escrow-detail" class="form-control" rows="3" required placeholder="Contoh: Akun MLBB Rank Mythic, Skin Legend Alucard, wr 60%. Full bind."></textarea>
+                        
+                        <!-- AI Valuator Feature -->
+                        <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px;">
+                            <button type="button" id="btn-ai-estimate" class="btn-ai" style="align-self: flex-start;" onclick="App.estimateAccountValue()">
+                                ✨ Taksir Harga dengan AI
+                            </button>
+                            <div id="ai-valuation-result" class="ai-response-box"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group"><label>Harga Kesepakatan (Rp)</label><input type="number" id="escrow-price" class="form-control" required placeholder="150000"></div>
+                    <div class="form-group"><label>Nomor WA Pihak Lawan</label><input type="text" id="escrow-target" class="form-control" required placeholder="Nomor WA target Penjual/Pembeli"></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1.2rem;">Kirim Request Pengawalan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Rundown BondFest -->
+    <div id="bondfest-modal" class="modal-overlay">
+        <div class="modal" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3 class="modal-title">Rundown BondFest 2026</h3>
+                <button class="modal-close" onclick="App.closeModal('bondfest-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <h4 style="margin-bottom: 1rem; background: rgba(255,255,255,0.05); padding: 0.8rem 1.2rem; border-radius: 12px; display: inline-block;">🗓️ Kamis, 5 Maret 2026</h4>
+                
+                <h5 style="color: var(--accent-red); margin-top: 1.5rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">Sesi Siang (Kualifikasi)</h5>
+                <h6 style="margin-top: 10px; font-size: 1.15rem;">Round of 16 (BO3)</h6>
+                <p class="muted-text" style="font-size: 0.9rem; margin-bottom: 15px;">Dibagi menjadi 2 kloter utama, dengan format 1 kloter = 4 room paralel berjalan bersamaan.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="background: rgba(30,34,41,0.8); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border-color);">
+                        <h6 style="margin-bottom: 15px; color: var(--text-main); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">Kloter 1</h6>
+                        <ul class="bullet-list" style="margin: 0; font-size: 0.9rem;">
+                            <li>12.30 – 13.00: <strong>Game 1</strong></li>
+                            <li>13.00 – 13.30: <strong>Game 2</strong></li>
+                            <li>13.30 – 14.00: <strong>Game 3</strong> (Opsional)</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(30,34,41,0.8); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--border-color);">
+                        <h6 style="margin-bottom: 15px; color: var(--text-main); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">Kloter 2</h6>
+                        <ul class="bullet-list" style="margin: 0; font-size: 0.9rem;">
+                            <li>13.30 – 14.00: <strong>Game 1</strong></li>
+                            <li>14.00 – 14.30: <strong>Game 2</strong></li>
+                            <li>14.30 – 15.00: <strong>Game 3</strong> (Opsional)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h6 style="margin-top: 1.5rem; font-size: 1.15rem;">Quarterfinal (BO3)</h6>
+                <p class="muted-text" style="font-size: 0.9rem; margin-bottom: 15px;">Berjalan dengan 4 room paralel. Game ke-3 bersifat mandiri/fleksibel mengikuti kondisi laga.</p>
+                <ul class="bullet-list">
+                    <li>15.00 – 15.30: Quarter Match - Game 1</li>
+                    <li>15.30 – 16.00: Quarter Match - Game 2</li>
+                    <li>16.00 – 16.30: Quarter Match - Game 3</li>
+                </ul>
+
+                <h5 style="color: var(--accent-red); margin-top: 2.5rem; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">Sesi Malam (Penentuan)</h5>
+                <h6 style="margin-top: 10px; font-size: 1.15rem;">Semifinal Series (BO3)</h6>
+                <ul class="bullet-list" style="margin-bottom: 1.5rem;">
+                    <li>21.00 – 21.30: Semifinal - Match 1</li>
+                    <li>21.30 – 22.00: Semifinal - Match 2</li>
+                    <li>22.00 – 22.30: Semifinal - Match 3 (Jika skor imbang)</li>
+                </ul>
+                <h6 style="margin-top: 1rem; font-size: 1.15rem;">Grand Final (Tahap 1)</h6>
+                <ul class="bullet-list">
+                    <li>22.00 – 22.30: Pembukaan Final – Game 1</li>
+                </ul>
+
+                <div style="border-top: 2px dashed rgba(255,255,255,0.1); margin: 3rem 0;"></div>
+
+                <h4 style="margin-bottom: 1rem; background: rgba(242,85,85,0.1); color: var(--accent-red); padding: 0.8rem 1.2rem; border-radius: 12px; display: inline-block;">🏆 Jum'at, 6 Maret 2026</h4>
+                <h6 style="font-size: 1.15rem; margin-top: 10px;">Lanjutan Final Series (Offline Mode)</h6>
+                <p class="muted-text" style="font-size: 0.9rem; margin-bottom: 15px;">Digelar secara tatap muka (LAN) dengan pendampingan live caster penuh.</p>
+                <ul class="bullet-list">
+                    <li>15.00 – 15.30: Grand Final – Game 2</li>
+                    <li>15.33 – 16.03: Grand Final – Game 3 (Laga penentu akhir)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Coming Soon -->
+    <div id="service-comingsoon-modal" class="modal-overlay">
+        <div class="modal" style="max-width: 400px; text-align: center; border-radius: 28px;">
+            <div class="modal-body" style="padding: 4rem 2.5rem;">
+                <div style="font-size: 4.5rem; margin-bottom: 1rem; opacity: 0.9;">🚧</div>
+                <h3 style="margin-bottom: 10px; font-size: 1.5rem; color: var(--text-main);">Masih Dalam Lab</h3>
+                <p class="muted-text" style="line-height: 1.6;">Maaf banget ya, fitur hebat yang kamu klik ini masih digodok matang oleh tim developer kami. Nantikan info rilisnya!</p>
+                <button class="btn btn-secondary" style="margin-top: 2.5rem; width: 100%; padding: 1.2rem;" onclick="App.closeModal('service-comingsoon-modal')">Oke, Saya Mengerti</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APP UTAMA + GEMINI API INTEGRATION -->
+    <script>
+        const App = {
+            adminWA: "62882009269282",
+            playerCount: 0,
+            
+            init() {
+                this.addPlayer(); 
+                this.setupScrollListener();
+                
+                // Loading screen logic
+                window.addEventListener('load', () => {
+                    const loader = document.getElementById('loading-screen');
+                    setTimeout(() => {
+                        loader.style.opacity = '0';
+                        setTimeout(() => loader.style.display = 'none', 500);
+                    }, 1200); 
+                });
+            },
+
+            // --- GEMINI API INTEGRATION (LLM CORE) ---
+            async callGeminiAPI(promptText) {
+                const apiKey = ""; // API Key provided by execution environment
+                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                const payload = {
+                    contents: [{ parts: [{ text: promptText }] }]
+                };
+
+                const maxRetries = 5;
+                let delay = 1000;
+
+                for (let i = 0; i < maxRetries; i++) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        return data.candidates?.[0]?.content?.parts?.[0]?.text || "Gagal memproses respons dari AI.";
+                    } catch (error) {
+                        if (i === maxRetries - 1) {
+                            console.error("Gemini API Error:", error);
+                            return "Aduh, AI kita sedang sibuk nih. Coba lagi dalam beberapa saat ya!";
+                        }
+                        await new Promise(res => setTimeout(res, delay));
+                        delay *= 2; // Exponential backoff
+                    }
+                }
+            },
+
+            // Feature 1: AI Estimasi Harga Akun
+            async estimateAccountValue() {
+                const detailInput = document.getElementById('escrow-detail').value;
+                const resultDiv = document.getElementById('ai-valuation-result');
+                const btn = document.getElementById('btn-ai-estimate');
+
+                if (!detailInput.trim()) {
+                    alert("Tolong isi detail spesifikasi akunnya dulu ya biar AI bisa bantu taksir harganya!");
+                    return;
+                }
+
+                btn.innerHTML = "⏳ AI Menganalisis Pasar...";
+                btn.disabled = true;
+                resultDiv.classList.remove('active');
+                resultDiv.innerHTML = "";
+
+                const prompt = `Bertindaklah sebagai pakar dan penilai (appraiser) akun game esports di Indonesia. 
+                Berikan estimasi kasar harga pasaran dalam Rupiah untuk akun dengan spesifikasi berikut: "${detailInput}". 
+                Berikan jawaban yang sangat singkat, padat, dan langsung ke kisaran harga (misal: "Estimasi: Rp 500.000 - Rp 700.000"). 
+                Beri tambahan 1 kalimat singkat kenapa harganya segitu (misal karena skin legend atau rank). Gunakan gaya bahasa anak warnet/gamers Indonesia.`;
+
+                const result = await this.callGeminiAPI(prompt);
+
+                resultDiv.innerHTML = `<strong>🤖 Insight AI Penilai:</strong> ${result}`;
+                resultDiv.classList.add('active');
+                
+                btn.innerHTML = "✨ Taksir Ulang Harga";
+                btn.disabled = false;
+            },
+
+            // Feature 2: AI Proposal Drafter untuk Turnamen
+            async generateProposalDraft() {
+                const eventName = document.getElementById('event-name').value || "Turnamen Tanpa Nama";
+                const mode = document.getElementById('mode').value || "Online";
+                const bracket = document.getElementById('bracket').value || "Single Elimination";
+                const pkg = document.getElementById('package').options[document.getElementById('package').selectedIndex].text || "Belum dipilih";
+                
+                const notesArea = document.getElementById('order-message');
+                const currentNotes = notesArea.value;
+                const btn = document.getElementById('btn-ai-proposal');
+
+                btn.innerHTML = "⏳ Menyusun Kata-kata...";
+                btn.disabled = true;
+
+                const prompt = `Saya adalah klien yang ingin menyelenggarakan turnamen esports bernama "${eventName}" menggunakan jasa Event Organizer. 
+                Spesifikasi acara: Mode ${mode}, Format Bracket ${bracket}, menggunakan paket ${pkg}.
+                Catatan kasar saya saat ini: "${currentNotes || 'Belum ada ide spesifik'}".
+                
+                Tugasmu: Buatkan draf catatan tambahan/briefing singkat namun sangat profesional dan terstruktur untuk dikirimkan ke pihak T.O Aernest Vanguard. 
+                Tambahkan ide liar namun realistis (seperti ide pembagian prize pool atau teknis verifikasi peserta).
+                Format dalam maksimal 2 paragraf padat. Gunakan bahasa Indonesia profesional bercampur istilah esports yang umum.`;
+
+                const result = await this.callGeminiAPI(prompt);
+
+                // Bersihkan Markdown asterisk ganda agar terlihat rapi di dalam textarea biasa
+                notesArea.value = result.replace(/\*\*/g, ''); 
+                
+                btn.innerHTML = "✨ Rapikan Ulang dengan AI";
+                btn.disabled = false;
+            },
+            // --- END GEMINI API ---
+
+            // Glassmorphism Navbar Scroll Effect
+            setupScrollListener() {
+                window.addEventListener('scroll', () => {
+                    const navbar = document.getElementById('navbar');
+                    // Efek hanya berlaku untuk desktop (top navbar)
+                    if (window.innerWidth > 768) {
+                        if (window.scrollY > 20) {
+                            navbar.classList.add('scrolled');
+                        } else {
+                            navbar.classList.remove('scrolled');
+                        }
+                    }
+                });
+            },
+
+            // Mobile Menu
+            toggleMobileMenu() {
+                const nav = document.getElementById('nav-menu');
+                nav.classList.toggle('active');
+            },
+
+            navigate(viewId) {
+                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+                
+                const targetView = document.getElementById(`view-${viewId}`);
+                if (targetView) targetView.classList.add('active');
+                
+                const links = document.querySelectorAll('.nav-link');
+                links.forEach(link => {
+                    const text = link.innerText.toLowerCase();
+                    let match = false;
+                    
+                    // Match the correct viewId with the actual Indonesian text in the button
+                    if (viewId === 'home' && text.includes('beranda')) match = true;
+                    if (viewId === 'marketplace' && text.includes('katalog')) match = true;
+                    if (viewId === 'services' && text.includes('layanan')) match = true;
+                    if (viewId === 'to-order' && text.includes('layanan')) match = true;
+                    if (viewId === 'contact' && text.includes('bantuan')) match = true;
+
+                    if (match) {
+                        link.classList.add('active');
+                    }
+                });
+
+                if(window.innerWidth <= 900) {
+                    document.getElementById('nav-menu').classList.remove('active');
+                }
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            },
+
+            // Modals
+            openModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+            },
+            closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (modal) { modal.classList.remove('active'); document.body.style.overflow = ''; }
+            },
+
+            // Marketplace Filters
+            filterMarket(category, btnElement) {
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                if(btnElement) btnElement.classList.add('active');
+
+                document.querySelectorAll('.market-item').forEach(item => {
+                    if (category === 'semua' || item.getAttribute('data-category') === category) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                document.querySelectorAll('.category-info').forEach(info => {
+                    if (info.id === `info-${category}`) info.style.display = 'block';
+                    else info.style.display = 'none';
+                });
+            },
+
+            // Checkout Data
+            openCheckout(productName, price) {
+                document.getElementById('co-product').innerText = productName;
+                document.getElementById('co-price').innerText = price;
+                this.openModal('checkout-modal');
+            },
+            processCheckout(e) {
+                e.preventDefault();
+                const product = document.getElementById('co-product').innerText;
+                const price = document.getElementById('co-price').innerText;
+                const ign = document.getElementById('co-ign').value;
+                const id = document.getElementById('co-id').value;
+                const wa = document.getElementById('co-wa').value;
+
+                const text = `Halo Admin Aernest! Saya mau order katalog nih:%0A%0A📦 *Item Produk:* ${product}%0A💰 *Harga:* ${price}%0A🎮 *Nickname (IGN):* ${ign}%0A🆔 *ID Akun:* ${id}%0A📱 *Nomor WA:* ${wa}%0A%0ATolong arahkan panduan pembayarannya ya!`;
+                window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
+                document.getElementById('co-form').reset();
+                this.closeModal('checkout-modal');
+            },
+
+            // Escrow
+            openEscrowModal() { this.openModal('escrow-modal'); },
+            submitEscrow(e) {
+                e.preventDefault();
+                const role = document.getElementById('escrow-role').value;
+                const detail = document.getElementById('escrow-detail').value;
+                const price = document.getElementById('escrow-price').value;
+                const target = document.getElementById('escrow-target').value;
+
+                const text = `🚨 *REQ REKBER MAKJAKUN* 🚨%0A%0A👤 *Posisi Saya:* ${role}%0A🎮 *Detail Akun:* ${detail}%0A💰 *Harga Kesepakatan:* Rp ${price}%0A📞 *Kontak Partner (Lawan):* ${target}%0A%0AMin, tolong bantu kawal transaksinya dan buatin grup WA.`;
+                window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
+                document.getElementById('escrow-form').reset();
+                this.closeModal('escrow-modal');
+                // Hide AI box if it was open
+                document.getElementById('ai-valuation-result').classList.remove('active');
+            },
+
+            // TO Order Dynamic
+            goToOrder(packageType) {
+                this.navigate('to-order');
+                const pkgSelect = document.getElementById('package');
+                if(pkgSelect) pkgSelect.value = packageType;
+            },
+            addPlayer() {
+                this.playerCount++;
+                const container = document.getElementById('roster-container');
+                const html = `
+                    <div class="roster-slot" id="player-${this.playerCount}">
+                        <input type="text" class="form-control player-nick" placeholder="Nama Anggota Tim / Pemain ${this.playerCount}">
+                        ${this.playerCount > 1 ? `<button type="button" class="roster-remove" onclick="App.removePlayer(${this.playerCount})">✕</button>` : ''}
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            },
+            removePlayer(id) {
+                const el = document.getElementById(`player-${id}`);
+                if (el) el.remove();
+            },
+            submitTO(e) {
+                e.preventDefault();
+                const pkg = document.getElementById('package').value;
+                const eventName = document.getElementById('event-name').value;
+                const eventDate = document.getElementById('event-date').value;
+                const mode = document.getElementById('mode').value;
+                const bracket = document.getElementById('bracket').value;
+                const name = document.getElementById('order-name').value;
+                const msg = document.getElementById('order-message').value;
+                
+                let rosterText = "";
+                const nicks = document.querySelectorAll('.player-nick');
+                nicks.forEach((nick) => { if(nick.value) rosterText += `%0A- ${nick.value}`; });
+
+                const text = `Halo tim Aernest! Mau ngajuin proposal event T.O nih:%0A%0A👤 *PIC Acara:* ${name}%0A🏆 *Nama Event:* ${eventName} (${eventDate})%0A🎬 *Paket Produksi:* ${pkg}%0A🌐 *Format Event:* ${mode} | Bracket ${bracket}%0A%0A*Data Tim Terdaftar:*${rosterText}%0A%0ACatatan Tambahan: ${msg || '-'}`;
+                window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
+            },
+
+            // Contact
+            submitAduan(e) {
+                e.preventDefault();
+                const name = document.getElementById('c-name').value;
+                const cat = document.getElementById('c-service').value;
+                const msg = document.getElementById('c-message').value;
+
+                const text = `*TIKET BANTUAN BARU*%0A%0AHalo admin, nama saya ${name}. Saya mau diskusi tentang *${cat}*.%0A%0AIsi Pesan Detail: ${msg}`;
+                window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
+                document.getElementById('contact-form').reset();
+                alert("Sip! Pesanmu siap diteruskan ke WhatsApp staf kami.");
+            }
+        };
+
+        // Execution
+        document.addEventListener('DOMContentLoaded', () => App.init());
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>
