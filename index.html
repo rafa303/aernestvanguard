@@ -79,13 +79,14 @@
         @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
         @keyframes load { 0% { left: -50%; width: 50%; } 100% { left: 100%; width: 50%; } }
 
-        /* BACKGROUND ELEMENTS (Dinamis & Terlihat Jelas) */
+        /* BACKGROUND ELEMENTS */
         .bg-wrapper {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+            position: fixed; inset: 0; z-index: -10; pointer-events: none; overflow: hidden;
+            background-color: var(--bg-base);
         }
         .bg-pattern {
-            position: absolute; inset: 0; opacity: 0.6;
-            background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
+            position: absolute; inset: 0; opacity: 0.5;
+            background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
             background-size: 30px 30px;
         }
         .bg-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.25; }
@@ -95,6 +96,7 @@
         .bg-watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 80vw; max-width: 900px; opacity: 0.03; filter: grayscale(100%);
+            pointer-events: none;
         }
         
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(80px, 80px) scale(1.15); } }
@@ -104,11 +106,10 @@
         .accent-text { color: var(--accent-red); }
         .muted-text { color: var(--text-muted); font-size: clamp(0.9rem, 2vw, 1rem); }
 
-        /* Elevation Layering untuk konten di atas Background */
         main, footer, .modal-overlay, .navbar, .mobile-top-bar { position: relative; z-index: 10; }
 
         /* =========================================
-           MOBILE TOP BAR (Khusus Logo & Tombol TO)
+           MOBILE TOP BAR 
            ========================================= */
         .mobile-top-bar { display: none; }
 
@@ -162,6 +163,8 @@
         }
         .desktop-cta:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 20px rgba(242,85,85,0.5); }
 
+        .mobile-only-cta { display: none; }
+
         /* =========================================
            MAIN LAYOUT & COMPONENTS
            ========================================= */
@@ -172,7 +175,7 @@
         .view-section.active { display: block; }
         @keyframes slideUpFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Buttons Dinamis */
+        /* Buttons */
         .btn {
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2.5rem); 
@@ -182,6 +185,7 @@
         }
         .btn-primary { background: var(--accent-gradient); color: white; box-shadow: 0 4px 15px rgba(242,85,85,0.3); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(242,85,85,0.5); filter: brightness(1.1); }
+        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
         
         .btn-secondary { background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); }
         .btn-secondary:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); border-color: rgba(255,255,255,0.3); box-shadow: var(--shadow-soft); }
@@ -320,7 +324,7 @@
         /* =========================================
            RESPONSIVE BREAKPOINTS (APP DOCK MOBILE)
            ========================================= */
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             /* 1. Header Khusus Mobile (Atas) */
             .mobile-top-bar {
                 position: fixed; top: 10px; left: 10px; right: 10px; z-index: 1000;
@@ -374,7 +378,7 @@
     <!-- LOADING SPLASH SCREEN -->
     <div id="loading-screen">
         <img src="images/logo.png" alt="Aernest Logo" class="loader-logo" onerror="this.style.display='none'">
-        <div class="loader-text">AERNEST <span>VANGUARD</span></div>
+        <div class="loader-text">AERNEST <span style="color: var(--accent-red);">VANGUARD</span></div>
         <div class="loader-bar"><div class="loader-progress"></div></div>
     </div>
 
@@ -460,17 +464,17 @@
                     <div class="step-item">
                         <span class="step-num">LANGKAH 01</span>
                         <h3 class="step-title">Pilih Kebutuhanmu</h3>
-                        <p class="muted-text">Eksplorasi layanan Katalog untuk beli akun & top up murah, atau masuk ke menu Layanan untuk menyelenggarakan turnamenmu sendiri.</p>
+                        <p class="muted-text">Eksplorasi layanan Katalog untuk beli akun dan top up murah, atau masuk ke menu Layanan untuk menyelenggarakan turnamenmu sendiri.</p>
                     </div>
                     <div class="step-item">
                         <span class="step-num">LANGKAH 02</span>
                         <h3 class="step-title">Transaksi Super Aman</h3>
-                        <p class="muted-text">Gunakan fitur form pintar kami yang terhubung langsung dengan WhatsApp Admin. Semua pembayaran dikawal ketat dengan sistem Escrow (Rekber).</p>
+                        <p class="muted-text">Gunakan fitur form pintar kami yang terhubung dengan database otomatis dan WhatsApp Admin. Pembayaran dikawal ketat dengan sistem Escrow (Rekber).</p>
                     </div>
                     <div class="step-item">
                         <span class="step-num">LANGKAH 03</span>
                         <h3 class="step-title">Main & Dominasi</h3>
-                        <p class="muted-text">Pamerkan skin & item barumu, atau bersiaplah memimpin tim esports kamu untuk memenangkan Prize Pool di turnamen bergengsi kami.</p>
+                        <p class="muted-text">Pamerkan skin dan item barumu, atau bersiaplah memimpin tim esports kamu untuk memenangkan Prize Pool di turnamen bergengsi kami.</p>
                     </div>
                 </div>
 
@@ -595,7 +599,7 @@
                         <div class="card-img-wrapper"><span class="card-tag" style="background:var(--accent-red);">Aman 100%</span><span class="card-img-text" style="font-size:2rem;">MAKJAKUN</span></div>
                         <div class="card-content">
                             <h4 class="card-title">Jasa Rekber Akun</h4>
-                            <p class="card-desc">Jembatan aman antara penjual & pembeli. Hindari penipuan!</p>
+                            <p class="card-desc">Jembatan aman antara penjual dan pembeli. Hindari penipuan!</p>
                             <div class="card-footer">
                                 <span class="card-price" style="font-size:0.95rem; color:var(--text-main);">Fee Transparan</span>
                                 <button class="btn btn-secondary" style="padding: 0.5rem 1.2rem;" onclick="App.openEscrowModal()">Hubungi Admin</button>
@@ -638,10 +642,10 @@
                             <h2 class="card-title" style="font-size: 1.8rem; margin-bottom: 1rem;">Tournament Organizer</h2>
                             <p class="card-desc" style="font-size: 1.05rem;">Selenggarakan turnamen dengan bracket terstruktur, lengkap dengan caster, live production, dan ruang turnamen eksklusif.</p>
                             <ul class="bullet-list" style="margin-bottom: 2.5rem;">
-                                <li>Pendaftaran online & verifikasi identitas tim</li>
-                                <li>Pengaturan Bracket System & Anti-cheat</li>
-                                <li>Caster, Live Streaming muti-platform, & Overlay UI</li>
-                                <li>Pengelolaan & distribusi Prize Pool aman</li>
+                                <li>Pendaftaran online dan verifikasi identitas tim</li>
+                                <li>Pengaturan Bracket System dan Anti-cheat</li>
+                                <li>Caster, Live Streaming muti-platform, dan Overlay UI</li>
+                                <li>Pengelolaan dan distribusi Prize Pool aman</li>
                             </ul>
                             <button class="btn btn-primary" onclick="App.navigate('to-order')">Buat Turnamen Sekarang</button>
                         </div>
@@ -653,7 +657,7 @@
                             <div style="font-size: 2.5rem; opacity: 0.5;">🎮</div>
                             <div style="flex-grow: 1;">
                                 <h4 style="margin-bottom: 5px; font-size: 1.1rem;">Jasa Joki Rank</h4>
-                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Kenaikan rank aman & terarah oleh pro-player.</p>
+                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Kenaikan rank aman dan terarah oleh pro-player.</p>
                             </div>
                             <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="App.openModal('service-comingsoon-modal')">Soon</button>
                         </div>
@@ -662,7 +666,7 @@
                             <div style="font-size: 2.5rem; opacity: 0.5;">🎓</div>
                             <div style="flex-grow: 1;">
                                 <h4 style="margin-bottom: 5px; font-size: 1.1rem;">Aernest Academy</h4>
-                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Coaching eksklusif & manajemen karir esports.</p>
+                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Coaching eksklusif dan manajemen karir esports.</p>
                             </div>
                             <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="App.openModal('service-comingsoon-modal')">Soon</button>
                         </div>
@@ -671,7 +675,7 @@
                             <div style="font-size: 2.5rem; opacity: 0.5;">🎪</div>
                             <div style="flex-grow: 1;">
                                 <h4 style="margin-bottom: 5px; font-size: 1.1rem;">Event Offline (E.O)</h4>
-                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Venue, stage production, & izin teknis turnamen LAN.</p>
+                                <p class="muted-text" style="margin-bottom: 0; font-size: 0.9rem;">Venue, stage production, dan izin teknis turnamen LAN.</p>
                             </div>
                             <button class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;" onclick="App.openModal('service-comingsoon-modal')">Soon</button>
                         </div>
@@ -707,7 +711,7 @@
                             <ul class="bullet-list" style="text-align: left; margin-bottom: 2.5rem;">
                                 <li>Bracket profesional multi-fase</li>
                                 <li>Multi-platform live streaming</li>
-                                <li>Caster bersertifikat & commentary</li>
+                                <li>Caster bersertifikat dan commentary</li>
                                 <li>Room tournament dedikasi (aman)</li>
                                 <li>Distribusi manajemen hadiah</li>
                             </ul>
@@ -724,7 +728,7 @@
                                 <li>Suite turnamen white-label</li>
                                 <li>Produksi kualitas broadcast TV</li>
                                 <li>Dukungan sponsor placement</li>
-                                <li>Room premium & anti-cheat</li>
+                                <li>Room premium dan anti-cheat</li>
                                 <li>Kustomisasi rules menyeluruh</li>
                             </ul>
                             <button class="btn btn-secondary" style="width: 100%;" onclick="App.goToOrder('enterprise')">Konsultasi Admin</button>
@@ -807,8 +811,13 @@
                             <textarea id="order-message" class="form-control" rows="4" placeholder="Tuliskan catatan kasar, logo sponsor, atau aturan main spesifik game, lalu klik tombol AI di atas untuk merapikannya menjadi bahasa proposal yang keren!"></textarea>
                         </div>
 
-                        <div style="margin-top: 3rem; text-align: right;">
-                            <button type="submit" class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.1rem; width: 100%;">Ajukan Proposal via WA Admin</button>
+                        <!-- Info Penyimpanan DB -->
+                        <div style="text-align: right; margin-top: 10px; color: var(--text-muted); font-size: 0.85rem;">
+                            <span id="db-status-to"></span>
+                        </div>
+
+                        <div style="margin-top: 2rem; text-align: right;">
+                            <button type="submit" id="btn-submit-to" class="btn btn-primary" style="padding: 1.2rem 3rem; font-size: 1.1rem; width: 100%;">Ajukan Proposal via WA Admin</button>
                         </div>
                     </form>
                 </div>
@@ -875,7 +884,7 @@
                                 </select>
                             </div>
                             <div class="form-group"><label>Isi Pesan Detail</label><textarea id="c-message" class="form-control" placeholder="Jelaskan kebutuhan atau aduanmu secara detail di sini..." required></textarea></div>
-                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.2rem;">Kirim Tiket Sekarang</button>
+                            <button type="submit" id="btn-submit-contact" class="btn btn-primary" style="width: 100%; padding: 1.2rem;">Kirim Tiket Sekarang</button>
                         </form>
                     </div>
                 </div>
@@ -922,7 +931,7 @@
                     <h4 class="footer-heading">Navigasi Utama</h4>
                     <ul class="footer-links">
                         <li><a onclick="App.navigate('home')">Beranda Platform</a></li>
-                        <li><a onclick="App.navigate('marketplace')">Marketplace Item & Akun</a></li>
+                        <li><a onclick="App.navigate('marketplace')">Katalog Item & Akun</a></li>
                         <li><a onclick="App.navigate('services')">Layanan T.O & Event</a></li>
                     </ul>
                 </div>
@@ -968,13 +977,13 @@
                     <div class="form-group"><label>Nickname Game (IGN)</label><input type="text" id="co-ign" class="form-control" required placeholder="Contoh: RafaVanguard"></div>
                     <div class="form-group"><label>ID Pengguna (Serta Server)</label><input type="text" id="co-id" class="form-control" required placeholder="Contoh: 12345678 (1234)"></div>
                     <div class="form-group"><label>Nomor WhatsApp Aktif</label><input type="tel" id="co-wa" class="form-control" required placeholder="0812..."></div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1.2rem;">Lanjut Chat Admin Pembayaran</button>
+                    <button type="submit" id="btn-submit-co" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1.2rem;">Lanjut Chat Admin Pembayaran</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal Escrow (WITH AI VALUATION) -->
+    <!-- Modal Escrow -->
     <div id="escrow-modal" class="modal-overlay">
         <div class="modal">
             <div class="modal-header">
@@ -990,7 +999,6 @@
                         <label>Ceritakan Detail Transaksimu</label>
                         <textarea id="escrow-detail" class="form-control" rows="3" required placeholder="Contoh: Akun MLBB Rank Mythic, Skin Legend Alucard, wr 60%. Full bind."></textarea>
                         
-                        <!-- AI Valuator Feature -->
                         <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 10px;">
                             <button type="button" id="btn-ai-estimate" class="btn-ai" style="align-self: flex-start;" onclick="App.estimateAccountValue()">
                                 ✨ Taksir Harga dengan AI
@@ -1001,7 +1009,7 @@
 
                     <div class="form-group"><label>Harga Kesepakatan (Rp)</label><input type="number" id="escrow-price" class="form-control" required placeholder="150000"></div>
                     <div class="form-group"><label>Nomor WA Pihak Lawan</label><input type="text" id="escrow-target" class="form-control" required placeholder="Nomor WA target Penjual/Pembeli"></div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1.2rem;">Kirim Request Pengawalan</button>
+                    <button type="submit" id="btn-submit-escrow" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1.2rem;">Kirim Request Pengawalan</button>
                 </form>
             </div>
         </div>
@@ -1085,17 +1093,19 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT APP UTAMA + GEMINI API INTEGRATION -->
+    <!-- JAVASCRIPT APP UTAMA & GOOGLE APPS SCRIPT DATABASE INTEGRATION -->
     <script>
         const App = {
             adminWA: "62882009269282",
             playerCount: 0,
             
+            // GANTI DENGAN URL WEB APP GOOGLE SCRIPT KAMU:
+            GAS_URL: "https://script.google.com/macros/s/AKfycbxqkrz_dO2l0llcu4KY8tZsNmSp2A-zYl0HsgF58GWb4InrkJggksUjx6OdAn3K3nYe/exec", 
+            
             init() {
                 this.addPlayer(); 
                 this.setupScrollListener();
                 
-                // Loading screen logic
                 window.addEventListener('load', () => {
                     const loader = document.getElementById('loading-screen');
                     setTimeout(() => {
@@ -1105,9 +1115,31 @@
                 });
             },
 
+            // --- FUNGSI UTAMA PENYIMPANAN DATABASE (GOOGLE SHEETS) ---
+            async saveToDatabase(type, payload) {
+                // Jangan paksa simpan kalau URL belum di-set sama Rafa
+                if(this.GAS_URL === "URL_WEB_APP_GOOGLE_SCRIPT_KAMU_DISINI" || !this.GAS_URL) {
+                    console.log("GAS_URL belum diatur, data hanya akan diteruskan ke WA.");
+                    return; 
+                }
+
+                try {
+                    // Pakai no-cors agar tidak di-blokir oleh preflight rules browser ke Google Script
+                    await fetch(this.GAS_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ type: type, payload: payload })
+                    });
+                    console.log(`Berhasil menyimpan log form [${type}] ke Database.`);
+                } catch (error) {
+                    console.error("Gagal menyimpan ke Google Sheets:", error);
+                }
+            },
+
             // --- GEMINI API INTEGRATION (LLM CORE) ---
             async callGeminiAPI(promptText) {
-                const apiKey = ""; // API Key provided by execution environment
+                const apiKey = ""; 
                 const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
                 const payload = {
                     contents: [{ parts: [{ text: promptText }] }]
@@ -1136,12 +1168,11 @@
                             return "Aduh, AI kita sedang sibuk nih. Coba lagi dalam beberapa saat ya!";
                         }
                         await new Promise(res => setTimeout(res, delay));
-                        delay *= 2; // Exponential backoff
+                        delay *= 2; 
                     }
                 }
             },
 
-            // Feature 1: AI Estimasi Harga Akun
             async estimateAccountValue() {
                 const detailInput = document.getElementById('escrow-detail').value;
                 const resultDiv = document.getElementById('ai-valuation-result');
@@ -1160,18 +1191,18 @@
                 const prompt = `Bertindaklah sebagai pakar dan penilai (appraiser) akun game esports di Indonesia. 
                 Berikan estimasi kasar harga pasaran dalam Rupiah untuk akun dengan spesifikasi berikut: "${detailInput}". 
                 Berikan jawaban yang sangat singkat, padat, dan langsung ke kisaran harga (misal: "Estimasi: Rp 500.000 - Rp 700.000"). 
-                Beri tambahan 1 kalimat singkat kenapa harganya segitu (misal karena skin legend atau rank). Gunakan gaya bahasa anak warnet/gamers Indonesia.`;
+                Beri tambahan 1 kalimat singkat kenapa harganya segitu (misal karena skin legend atau rank). Gunakan gaya bahasa anak warnet/gamers Indonesia. JANGAN PERNAH MENGGUNAKAN SIMBOL ASTERISK (*) DALAM JAWABANMU.`;
 
                 const result = await this.callGeminiAPI(prompt);
+                const cleanResult = result.replace(/\*/g, '');
 
-                resultDiv.innerHTML = `<strong>🤖 Insight AI Penilai:</strong> ${result}`;
+                resultDiv.innerHTML = `<strong>🤖 Insight AI Penilai:</strong> ${cleanResult}`;
                 resultDiv.classList.add('active');
                 
                 btn.innerHTML = "✨ Taksir Ulang Harga";
                 btn.disabled = false;
             },
 
-            // Feature 2: AI Proposal Drafter untuk Turnamen
             async generateProposalDraft() {
                 const eventName = document.getElementById('event-name').value || "Turnamen Tanpa Nama";
                 const mode = document.getElementById('mode').value || "Online";
@@ -1191,23 +1222,21 @@
                 
                 Tugasmu: Buatkan draf catatan tambahan/briefing singkat namun sangat profesional dan terstruktur untuk dikirimkan ke pihak T.O Aernest Vanguard. 
                 Tambahkan ide liar namun realistis (seperti ide pembagian prize pool atau teknis verifikasi peserta).
-                Format dalam maksimal 2 paragraf padat. Gunakan bahasa Indonesia profesional bercampur istilah esports yang umum.`;
+                Format dalam maksimal 2 paragraf padat. Gunakan bahasa Indonesia profesional bercampur istilah esports yang umum. PENTING: JANGAN PERNAH MENGGUNAKAN SIMBOL ASTERISK (*) SAMA SEKALI DALAM TEKS.`;
 
                 const result = await this.callGeminiAPI(prompt);
-
-                // Bersihkan Markdown asterisk ganda agar terlihat rapi di dalam textarea biasa
-                notesArea.value = result.replace(/\*\*/g, ''); 
+                
+                // Extra layer bersihkan Markdown asterisk ganda agar terlihat rapi di dalam textarea biasa
+                notesArea.value = result.replace(/\*/g, ''); 
                 
                 btn.innerHTML = "✨ Rapikan Ulang dengan AI";
                 btn.disabled = false;
             },
-            // --- END GEMINI API ---
 
-            // Glassmorphism Navbar Scroll Effect
+            // --- UI LOGIC ---
             setupScrollListener() {
                 window.addEventListener('scroll', () => {
                     const navbar = document.getElementById('navbar');
-                    // Efek hanya berlaku untuk desktop (top navbar)
                     if (window.innerWidth > 768) {
                         if (window.scrollY > 20) {
                             navbar.classList.add('scrolled');
@@ -1218,7 +1247,6 @@
                 });
             },
 
-            // Mobile Menu
             toggleMobileMenu() {
                 const nav = document.getElementById('nav-menu');
                 nav.classList.toggle('active');
@@ -1236,7 +1264,6 @@
                     const text = link.innerText.toLowerCase();
                     let match = false;
                     
-                    // Match the correct viewId with the actual Indonesian text in the button
                     if (viewId === 'home' && text.includes('beranda')) match = true;
                     if (viewId === 'marketplace' && text.includes('katalog')) match = true;
                     if (viewId === 'services' && text.includes('layanan')) match = true;
@@ -1255,7 +1282,6 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             },
 
-            // Modals
             openModal(modalId) {
                 const modal = document.getElementById(modalId);
                 if (modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
@@ -1265,7 +1291,6 @@
                 if (modal) { modal.classList.remove('active'); document.body.style.overflow = ''; }
             },
 
-            // Marketplace Filters
             filterMarket(category, btnElement) {
                 document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
                 if(btnElement) btnElement.classList.add('active');
@@ -1284,49 +1309,80 @@
                 });
             },
 
-            // Checkout Data
+            // --- FORM SUBMISSIONS (Simpan DB + Lempar ke WA) ---
+            
             openCheckout(productName, price) {
                 document.getElementById('co-product').innerText = productName;
                 document.getElementById('co-price').innerText = price;
                 this.openModal('checkout-modal');
             },
-            processCheckout(e) {
+            
+            async processCheckout(e) {
                 e.preventDefault();
+                const btn = document.getElementById('btn-submit-co');
+                const originText = btn.innerText;
+                btn.innerText = "⏳ Memproses Pesanan...";
+                btn.disabled = true;
+
                 const product = document.getElementById('co-product').innerText;
                 const price = document.getElementById('co-price').innerText;
                 const ign = document.getElementById('co-ign').value;
                 const id = document.getElementById('co-id').value;
                 const wa = document.getElementById('co-wa').value;
 
+                // 1. Simpan ke Google Sheets
+                await this.saveToDatabase('Checkout', { 
+                    Produk: product, Harga: price, IGN: ign, UserID: id, WA: wa 
+                });
+
+                // 2. Lempar ke WhatsApp
                 const text = `Halo Admin Aernest! Saya mau order katalog nih:%0A%0A📦 *Item Produk:* ${product}%0A💰 *Harga:* ${price}%0A🎮 *Nickname (IGN):* ${ign}%0A🆔 *ID Akun:* ${id}%0A📱 *Nomor WA:* ${wa}%0A%0ATolong arahkan panduan pembayarannya ya!`;
                 window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
+                
+                // Reset form
                 document.getElementById('co-form').reset();
                 this.closeModal('checkout-modal');
+                btn.innerText = originText;
+                btn.disabled = false;
             },
 
-            // Escrow
             openEscrowModal() { this.openModal('escrow-modal'); },
-            submitEscrow(e) {
+            
+            async submitEscrow(e) {
                 e.preventDefault();
+                const btn = document.getElementById('btn-submit-escrow');
+                const originText = btn.innerText;
+                btn.innerText = "⏳ Memproses Form...";
+                btn.disabled = true;
+
                 const role = document.getElementById('escrow-role').value;
                 const detail = document.getElementById('escrow-detail').value;
                 const price = document.getElementById('escrow-price').value;
                 const target = document.getElementById('escrow-target').value;
 
+                // 1. Simpan ke Google Sheets
+                await this.saveToDatabase('Escrow', { 
+                    Role: role, Detail_Akun: detail, Harga: price, WA_Lawan: target 
+                });
+
+                // 2. Lempar ke WhatsApp
                 const text = `🚨 *REQ REKBER MAKJAKUN* 🚨%0A%0A👤 *Posisi Saya:* ${role}%0A🎮 *Detail Akun:* ${detail}%0A💰 *Harga Kesepakatan:* Rp ${price}%0A📞 *Kontak Partner (Lawan):* ${target}%0A%0AMin, tolong bantu kawal transaksinya dan buatin grup WA.`;
                 window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
+                
+                // Reset form
                 document.getElementById('escrow-form').reset();
                 this.closeModal('escrow-modal');
-                // Hide AI box if it was open
                 document.getElementById('ai-valuation-result').classList.remove('active');
+                btn.innerText = originText;
+                btn.disabled = false;
             },
 
-            // TO Order Dynamic
             goToOrder(packageType) {
                 this.navigate('to-order');
                 const pkgSelect = document.getElementById('package');
                 if(pkgSelect) pkgSelect.value = packageType;
             },
+            
             addPlayer() {
                 this.playerCount++;
                 const container = document.getElementById('roster-container');
@@ -1342,35 +1398,73 @@
                 const el = document.getElementById(`player-${id}`);
                 if (el) el.remove();
             },
-            submitTO(e) {
+            
+            async submitTO(e) {
                 e.preventDefault();
+                const btn = document.querySelector('#to-order-form button[type="submit"]');
+                const originText = btn.innerText;
+                btn.innerText = "⏳ Menyusun Proposal...";
+                btn.disabled = true;
+
                 const pkg = document.getElementById('package').value;
                 const eventName = document.getElementById('event-name').value;
                 const eventDate = document.getElementById('event-date').value;
                 const mode = document.getElementById('mode').value;
                 const bracket = document.getElementById('bracket').value;
                 const name = document.getElementById('order-name').value;
+                const phone = document.getElementById('order-phone').value;
                 const msg = document.getElementById('order-message').value;
                 
+                let rosterArr = [];
                 let rosterText = "";
-                const nicks = document.querySelectorAll('.player-nick');
-                nicks.forEach((nick) => { if(nick.value) rosterText += `%0A- ${nick.value}`; });
+                document.querySelectorAll('.player-nick').forEach((nick) => { 
+                    if(nick.value) {
+                        rosterArr.push(nick.value);
+                        rosterText += `%0A- ${nick.value}`; 
+                    }
+                });
 
+                // 1. Simpan ke Google Sheets
+                await this.saveToDatabase('TO_Order', { 
+                    PIC: name, WA_PIC: phone, Event: eventName, Tanggal: eventDate,
+                    Paket: pkg, Mode: mode, Bracket: bracket, Roster: rosterArr.join(", "), Catatan: msg
+                });
+
+                // 2. Lempar ke WhatsApp
                 const text = `Halo tim Aernest! Mau ngajuin proposal event T.O nih:%0A%0A👤 *PIC Acara:* ${name}%0A🏆 *Nama Event:* ${eventName} (${eventDate})%0A🎬 *Paket Produksi:* ${pkg}%0A🌐 *Format Event:* ${mode} | Bracket ${bracket}%0A%0A*Data Tim Terdaftar:*${rosterText}%0A%0ACatatan Tambahan: ${msg || '-'}`;
                 window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
+                
+                btn.innerText = originText;
+                btn.disabled = false;
             },
 
-            // Contact
-            submitAduan(e) {
+            async submitAduan(e) {
                 e.preventDefault();
+                const btn = document.querySelector('#contact-form button[type="submit"]');
+                const originText = btn.innerText;
+                btn.innerText = "⏳ Mengirim Tiket...";
+                btn.disabled = true;
+
                 const name = document.getElementById('c-name').value;
+                const email = document.getElementById('c-email').value;
+                const phone = document.getElementById('c-phone').value;
                 const cat = document.getElementById('c-service').value;
                 const msg = document.getElementById('c-message').value;
 
+                // 1. Simpan ke Google Sheets
+                await this.saveToDatabase('Contact', { 
+                    Nama: name, Email: email, WA: phone, Kategori: cat, Pesan: msg 
+                });
+
+                // 2. Lempar ke WhatsApp
                 const text = `*TIKET BANTUAN BARU*%0A%0AHalo admin, nama saya ${name}. Saya mau diskusi tentang *${cat}*.%0A%0AIsi Pesan Detail: ${msg}`;
                 window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
+                
                 document.getElementById('contact-form').reset();
                 alert("Sip! Pesanmu siap diteruskan ke WhatsApp staf kami.");
+                
+                btn.innerText = originText;
+                btn.disabled = false;
             }
         };
 
