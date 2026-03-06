@@ -478,30 +478,17 @@
                     </div>
                 </div>
 
-                <!-- EVENT BANNER -->
+                <!-- EVENT BANNER (DYNAMIC SECTION) -->
                 <div class="section-header">
                     <h2 class="section-title">Event <span class="accent-text">Terdekat</span></h2>
                     <p class="muted-text">Turnamen komunitas yang sedang panas minggu ini.</p>
                 </div>
 
-                <div class="friendly-card" style="flex-direction: row; flex-wrap: wrap; margin-bottom: 6rem;">
-                    <div class="card-img-wrapper" style="flex: 1; min-width: 300px; height: auto; min-height: 300px;">
-                        <span class="card-img-text">BONDFEST</span>
-                    </div>
-                    <div class="card-content" style="flex: 2; min-width: 300px; padding: clamp(2rem, 4vw, 3rem);">
-                        <span class="card-tag" style="position:relative; top:0; left:0; display:inline-block; margin-bottom:1rem; background: rgba(242,85,85,0.15); color: var(--accent-red);">🔥 SEDANG BERJALAN</span>
-                        <h3 class="card-title" style="font-size: clamp(1.8rem, 3vw, 2.5rem);">BONDFEST 2026</h3>
-                        <p class="card-desc" style="font-size: 1.05rem;">Diselenggarakan oleh HASA Entertainment berkolaborasi penuh dengan Aernest Vanguard sebagai mitra resmi Tournament Organizer.</p>
-                        <ul class="bullet-list" style="margin-bottom: 2.5rem;">
-                            <li><strong>Host:</strong> HASA Entertainment x Aernest</li>
-                            <li><strong>Tanggal:</strong> 6 Maret 2026</li>
-                            <li><strong>Mode:</strong> Online (Kualifikasi) & Offline (Finalis)</li>
-                            <li><strong>Bracket:</strong> Single Elimination Terpusat</li>
-                        </ul>
-                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                            <button class="btn btn-primary" onclick="App.openModal('bondfest-modal')">Lihat Rundown Lengkap</button>
-                            <button class="btn btn-secondary" onclick="App.navigate('contact')">Hubungi Panitia</button>
-                        </div>
+                <!-- Container untuk Event Dinamis dari Spreadsheet -->
+                <div id="dynamic-events-container">
+                    <!-- Loading state sebelum data masuk -->
+                    <div style="text-align: center; padding: 3rem 0; margin-bottom: 6rem;">
+                        <p class="muted-text">⏳ Memuat data event dari server...</p>
                     </div>
                 </div>
 
@@ -1099,8 +1086,10 @@
             adminWA: "62882009269282",
             playerCount: 0,
             
-            // GANTI DENGAN URL WEB APP GOOGLE SCRIPT KAMU:
+            // GANTI DENGAN URL WEB APP GOOGLE SCRIPT KAMU UNTUK POST DATA:
             GAS_URL: "https://script.google.com/macros/s/AKfycbxqkrz_dO2l0llcu4KY8tZsNmSp2A-zYl0HsgF58GWb4InrkJggksUjx6OdAn3K3nYe/exec", 
+            // GANTI DENGAN URL WEB APP GOOGLE SCRIPT KAMU UNTUK FETCH ACARA TERDEKAT:
+            GAS_EVENTS_URL: "URL_APPS_SCRIPT_SPREADSHEET_ACARA_DISINI",
             
             init() {
                 this.addPlayer(); 
@@ -1113,18 +1102,117 @@
                         setTimeout(() => loader.style.display = 'none', 500);
                     }, 1200); 
                 });
+
+                // Tarik data event dinamis pas website dimuat
+                this.fetchEvents();
+            },
+
+            // --- FUNGSI BARU: MENGAMBIL EVENT DINAMIS DARI GOOGLE SPREADSHEET ---
+            async fetchEvents() {
+                const container = document.getElementById('dynamic-events-container');
+                
+                // Kalau URL belum diatur, langsung tampilkan fallback statis BondFest
+                if (!this.GAS_EVENTS_URL || this.GAS_EVENTS_URL === "URL_APPS_SCRIPT_SPREADSHEET_ACARA_DISINI") {
+                    this.renderFallbackEvent(container);
+                    return;
+                }
+
+                try {
+                    const response = await fetch(this.GAS_EVENTS_URL);
+                    const events = await response.json();
+                    
+                    if (events && events.length > 0) {
+                        container.innerHTML = ''; // Hapus tulisan loading
+                        
+                        events.forEach(ev => {
+                            // 1. Proses List Items (bisa dari array atau string yang dipisah tanda pipa | atau enter)
+                            let listHTML = '<ul class="bullet-list" style="margin-bottom: 2.5rem;">';
+                            if (ev.listItems) {
+                                const items = Array.isArray(ev.listItems) ? ev.listItems : ev.listItems.split(/\||\n/).filter(i => i.trim());
+                                items.forEach(item => {
+                                    listHTML += `<li>${item.trim()}</li>`;
+                                });
+                            }
+                            listHTML += '</ul>';
+
+                            // 2. Proses Buttons (Bisa pakai array atau kolom terpisah di Excel)
+                            let buttonsHTML = '<div style="display: flex; gap: 1rem; flex-wrap: wrap;">';
+                            if (ev.buttons && Array.isArray(ev.buttons)) {
+                                ev.buttons.forEach(btn => {
+                                    buttonsHTML += `<button class="btn ${btn.class || 'btn-primary'}" onclick="${btn.action || ''}">${btn.text}</button>`;
+                                });
+                            } else {
+                                // Mendukung kolom flat di Spreadsheet
+                                if (ev.btn1Text) buttonsHTML += `<button class="btn ${ev.btn1Class || 'btn-primary'}" onclick="${ev.btn1Action || ''}">${ev.btn1Text}</button>`;
+                                if (ev.btn2Text) buttonsHTML += `<button class="btn ${ev.btn2Class || 'btn-secondary'}" onclick="${ev.btn2Action || ''}">${ev.btn2Text}</button>`;
+                            }
+                            buttonsHTML += '</div>';
+
+                            // 3. Susun HTML Card Event
+                            const cardHTML = `
+                            <div class="friendly-card" style="flex-direction: row; flex-wrap: wrap; margin-bottom: 6rem;">
+                                <div class="card-img-wrapper" style="flex: 1; min-width: 300px; height: auto; min-height: 300px;">
+                                    <span class="card-img-text">${ev.imgText || 'EVENT'}</span>
+                                </div>
+                                <div class="card-content" style="flex: 2; min-width: 300px; padding: clamp(2rem, 4vw, 3rem);">
+                                    <span class="card-tag" style="position:relative; top:0; left:0; display:inline-block; margin-bottom:1rem; background: rgba(242,85,85,0.15); color: var(--accent-red);">${ev.tag || '🔥 EVENT TERBARU'}</span>
+                                    <h3 class="card-title" style="font-size: clamp(1.8rem, 3vw, 2.5rem);">${ev.title || 'Turnamen Komunitas'}</h3>
+                                    <p class="card-desc" style="font-size: 1.05rem;">${ev.desc || ''}</p>
+                                    ${listHTML}
+                                    ${buttonsHTML}
+                                </div>
+                            </div>
+                            `;
+                            
+                            container.insertAdjacentHTML('beforeend', cardHTML);
+                        });
+                    } else {
+                        container.innerHTML = '<p class="muted-text text-center" style="margin-bottom: 6rem;">Belum ada event terdekat saat ini. Tunggu info selanjutnya ya!</p>';
+                    }
+                } catch (error) {
+                    console.error("Gagal mengambil data event dari Spreadsheet:", error);
+                    // Kalau gagal koneksi (misal internet putus / di-blok CORS), tampilkan acara default
+                    this.renderFallbackEvent(container);
+                }
+            },
+
+            // Fungsi render acara default jika API tidak jalan
+            renderFallbackEvent(container) {
+                container.innerHTML = `
+                <div class="friendly-card" style="flex-direction: row; flex-wrap: wrap; margin-bottom: 6rem;">
+                    <div class="card-img-wrapper" style="flex: 1; min-width: 300px; height: auto; min-height: 300px;">
+                        <span class="card-img-text">BONDFEST</span>
+                    </div>
+                    <div class="card-content" style="flex: 2; min-width: 300px; padding: clamp(2rem, 4vw, 3rem);">
+                        <span class="card-tag" style="position:relative; top:0; left:0; display:inline-block; margin-bottom:1rem; background: rgba(242,85,85,0.15); color: var(--accent-red);">🔥 SEDANG BERJALAN</span>
+                        <h3 class="card-title" style="font-size: clamp(1.8rem, 3vw, 2.5rem);">BONDFEST 2026</h3>
+                        <p class="card-desc" style="font-size: 1.05rem;">Diselenggarakan oleh HASA Entertainment berkolaborasi penuh dengan Aernest Vanguard sebagai mitra resmi Tournament Organizer.</p>
+                        <ul class="bullet-list" style="margin-bottom: 2.5rem;">
+                            <li><strong>Host:</strong> HASA Entertainment x Aernest</li>
+                            <li><strong>Tanggal:</strong> 6 Maret 2026</li>
+                            <li><strong>Mode:</strong> Online (Kualifikasi) & Offline (Finalis)</li>
+                            <li><strong>Bracket:</strong> Single Elimination Terpusat</li>
+                        </ul>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <button class="btn btn-primary" onclick="App.openModal('bondfest-modal')">Lihat Rundown Lengkap</button>
+                            <button class="btn btn-secondary" onclick="App.navigate('contact')">Hubungi Panitia</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top: -4rem; margin-bottom: 6rem;">
+                    <small style="color:var(--accent-red);">*Data statis cadangan karena koneksi ke Spreadsheet (Apps Script) belum diatur / gagal.</small>
+                </div>
+                `;
             },
 
             // --- FUNGSI UTAMA PENYIMPANAN DATABASE (GOOGLE SHEETS) ---
             async saveToDatabase(type, payload) {
-                // Jangan paksa simpan kalau URL belum di-set sama Rafa
                 if(this.GAS_URL === "URL_WEB_APP_GOOGLE_SCRIPT_KAMU_DISINI" || !this.GAS_URL) {
                     console.log("GAS_URL belum diatur, data hanya akan diteruskan ke WA.");
                     return; 
                 }
 
                 try {
-                    // Pakai no-cors agar tidak di-blokir oleh preflight rules browser ke Google Script
                     await fetch(this.GAS_URL, {
                         method: 'POST',
                         mode: 'no-cors',
@@ -1226,7 +1314,6 @@
 
                 const result = await this.callGeminiAPI(prompt);
                 
-                // Extra layer bersihkan Markdown asterisk ganda agar terlihat rapi di dalam textarea biasa
                 notesArea.value = result.replace(/\*/g, ''); 
                 
                 btn.innerHTML = "✨ Rapikan Ulang dengan AI";
@@ -1330,16 +1417,13 @@
                 const id = document.getElementById('co-id').value;
                 const wa = document.getElementById('co-wa').value;
 
-                // 1. Simpan ke Google Sheets
                 await this.saveToDatabase('Checkout', { 
                     Produk: product, Harga: price, IGN: ign, UserID: id, WA: wa 
                 });
 
-                // 2. Lempar ke WhatsApp
                 const text = `Halo Admin Aernest! Saya mau order katalog nih:%0A%0A📦 *Item Produk:* ${product}%0A💰 *Harga:* ${price}%0A🎮 *Nickname (IGN):* ${ign}%0A🆔 *ID Akun:* ${id}%0A📱 *Nomor WA:* ${wa}%0A%0ATolong arahkan panduan pembayarannya ya!`;
                 window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
                 
-                // Reset form
                 document.getElementById('co-form').reset();
                 this.closeModal('checkout-modal');
                 btn.innerText = originText;
@@ -1360,16 +1444,13 @@
                 const price = document.getElementById('escrow-price').value;
                 const target = document.getElementById('escrow-target').value;
 
-                // 1. Simpan ke Google Sheets
                 await this.saveToDatabase('Escrow', { 
                     Role: role, Detail_Akun: detail, Harga: price, WA_Lawan: target 
                 });
 
-                // 2. Lempar ke WhatsApp
                 const text = `🚨 *REQ REKBER MAKJAKUN* 🚨%0A%0A👤 *Posisi Saya:* ${role}%0A🎮 *Detail Akun:* ${detail}%0A💰 *Harga Kesepakatan:* Rp ${price}%0A📞 *Kontak Partner (Lawan):* ${target}%0A%0AMin, tolong bantu kawal transaksinya dan buatin grup WA.`;
                 window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
                 
-                // Reset form
                 document.getElementById('escrow-form').reset();
                 this.closeModal('escrow-modal');
                 document.getElementById('ai-valuation-result').classList.remove('active');
@@ -1424,13 +1505,11 @@
                     }
                 });
 
-                // 1. Simpan ke Google Sheets
                 await this.saveToDatabase('TO_Order', { 
                     PIC: name, WA_PIC: phone, Event: eventName, Tanggal: eventDate,
                     Paket: pkg, Mode: mode, Bracket: bracket, Roster: rosterArr.join(", "), Catatan: msg
                 });
 
-                // 2. Lempar ke WhatsApp
                 const text = `Halo tim Aernest! Mau ngajuin proposal event T.O nih:%0A%0A👤 *PIC Acara:* ${name}%0A🏆 *Nama Event:* ${eventName} (${eventDate})%0A🎬 *Paket Produksi:* ${pkg}%0A🌐 *Format Event:* ${mode} | Bracket ${bracket}%0A%0A*Data Tim Terdaftar:*${rosterText}%0A%0ACatatan Tambahan: ${msg || '-'}`;
                 window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
                 
@@ -1451,12 +1530,10 @@
                 const cat = document.getElementById('c-service').value;
                 const msg = document.getElementById('c-message').value;
 
-                // 1. Simpan ke Google Sheets
                 await this.saveToDatabase('Contact', { 
                     Nama: name, Email: email, WA: phone, Kategori: cat, Pesan: msg 
                 });
 
-                // 2. Lempar ke WhatsApp
                 const text = `*TIKET BANTUAN BARU*%0A%0AHalo admin, nama saya ${name}. Saya mau diskusi tentang *${cat}*.%0A%0AIsi Pesan Detail: ${msg}`;
                 window.open(`https://wa.me/${this.adminWA}?text=${text}`, '_blank');
                 
