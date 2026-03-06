@@ -1087,9 +1087,9 @@
             playerCount: 0,
             
             // GANTI DENGAN URL WEB APP GOOGLE SCRIPT KAMU UNTUK POST DATA:
-            GAS_URL: "https://script.google.com/macros/s/AKfycbxqkrz_dO2l0llcu4KY8tZsNmSp2A-zYl0HsgF58GWb4InrkJggksUjx6OdAn3K3nYe/exec", 
+            GAS_URL: "https://script.google.com/macros/s/AKfycbx3dt5Bq22rpGbx0AgowLzDvbBtLCyVEEt_rjCsexyhKS9_cxuFhiMqTrIS4GRnHX7w/exec", 
             // GANTI DENGAN URL WEB APP GOOGLE SCRIPT KAMU UNTUK FETCH ACARA TERDEKAT:
-            GAS_EVENTS_URL: "URL_APPS_SCRIPT_SPREADSHEET_ACARA_DISINI",
+            GAS_EVENTS_URL: "https://script.google.com/macros/s/AKfycbx3dt5Bq22rpGbx0AgowLzDvbBtLCyVEEt_rjCsexyhKS9_cxuFhiMqTrIS4GRnHX7w/exec",
             
             init() {
                 this.addPlayer(); 
@@ -1207,21 +1207,24 @@
 
             // --- FUNGSI UTAMA PENYIMPANAN DATABASE (GOOGLE SHEETS) ---
             async saveToDatabase(type, payload) {
-                if(this.GAS_URL === "URL_WEB_APP_GOOGLE_SCRIPT_KAMU_DISINI" || !this.GAS_URL) {
+                if(!this.GAS_URL || this.GAS_URL.includes("URL_WEB_APP")) {
                     console.log("GAS_URL belum diatur, data hanya akan diteruskan ke WA.");
                     return; 
                 }
 
                 try {
+                    // Mengirim sebagai text/plain agar Google Script (CORS) tidak memblokir preflight OPTIONS
                     await fetch(this.GAS_URL, {
                         method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'application/json' },
+                        mode: 'no-cors', // Penting agar fetch dari browser eksternal tidak ditolak
+                        headers: {
+                            'Content-Type': 'text/plain',
+                        },
                         body: JSON.stringify({ type: type, payload: payload })
                     });
-                    console.log(`Berhasil menyimpan log form [${type}] ke Database.`);
+                    console.log(`Data log form [${type}] berhasil diantrikan ke serverless backend.`);
                 } catch (error) {
-                    console.error("Gagal menyimpan ke Google Sheets:", error);
+                    console.error("Gagal mengirim ke Google Sheets:", error);
                 }
             },
 
